@@ -207,7 +207,7 @@
             formData.append("image", fileInput.files[0]);
 
             try {
-                // Perubahan di sini: menghapus parameter expiration agar foto tidak otomatis terhapus
+                // Diperbarui: menghapus &expiration=600 agar foto tersimpan permanen
                 const imgbbResp = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
                 const imgbbResult = await imgbbResp.json();
                 if (!imgbbResult.success) throw new Error("ImgBB Failed");

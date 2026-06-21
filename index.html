@@ -17,239 +17,189 @@
         .club-laser {
             position: fixed; top: 50%; left: 50%; width: 150vw; height: 150vw;
             background: radial-gradient(circle, rgba(147,51,234,0.15) 0%, rgba(59,130,246,0.1) 40%, transparent 70%);
-            transform: translate(-50%, -50%); z-index: -2; pointer-events: none;
+            transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
+            animation: laserRotate 18s linear infinite;
         }
-        .laser-beam {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 25%, transparent 25%), linear-gradient(225deg, rgba(59, 130, 246, 0.05) 25%, transparent 25%);
-            background-size: 200% 200%; animation: clubLights 6s ease infinite alternate; z-index: -1; pointer-events: none;
-        }
-        @keyframes clubLights { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        @keyframes laserRotate { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        .text-neon-club {
-            color: #fff; text-shadow: 0 0 7px #fff, 0 0 15px #a855f7, 0 0 30px #a855f7, 0 0 60px #ec4899;
-            animation: flicker 3s infinite;
-        }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 95% { opacity: 1; } 96% { opacity: 0.85; } 97% { opacity: 1; } 99% { opacity: 0.9; } }
-
-        .vip-card {
-            background: rgba(15, 10, 25, 0.8); border: 2px solid rgba(168, 85, 247, 0.4);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.2), inset 0 0 15px rgba(236, 72, 153, 0.1);
-        }
-        .input-club {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(168, 85, 247, 0.3);
-            color: #fff; transition: all 0.2s ease;
-        }
-        .input-club:focus {
-            outline: none; border-color: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
-            background: rgba(255, 255, 255, 0.07);
-        }
-        .btn-club {
-            background: linear-gradient(90deg, #a855f7, #ec4899); color: #fff; font-weight: bold;
-            transition: all 0.3s ease; box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
-        }
-        .btn-club:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 0 25px #ec4899, 0 0 40px #a855f7; }
-        .btn-club:disabled { background: #334155; color: #64748b; box-shadow: none; cursor: not-allowed; }
-        
-        /* Spinner Khusus untuk Halaman Loading Prank */
-        .cyber-spinner {
-            border: 4px solid rgba(236, 72, 153, 0.1); border-left-color: #ec4899; border-right-color: #a855f7;
-            width: 60px; height: 60px; border-radius: 50%; animation: spin 1s linear infinite;
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .neon-glow-magenta { text-shadow: 0 0 10px #f43f5e, 0 0 20px #e11d48; }
+        .neon-border-cyan { border: 2px solid #06b6d4; box-shadow: 0 0 15px rgba(6,182,212,0.4), inset 0 0 15px rgba(6,182,212,0.2); }
+        .btn-magenta { background: linear-gradient(135deg, #e11d48, #9333ea); box-shadow: 0 0 15px rgba(225,29,72,0.4); }
+        .btn-magenta:hover:not(:disabled) { box-shadow: 0 0 25px #e11d48, 0 0 40px #9333ea; transform: translateY(-2px); }
     </style>
 </head>
-<body class="font-club-body min-h-screen flex items-center justify-center relative p-4 py-12">
+<body class="font-club-body min-h-screen p-4 flex flex-col items-center justify-center relative overflow-x-hidden">
 
     <div class="club-laser"></div>
-    <div class="laser-beam"></div>
 
-    <div class="z-10 w-full max-w-md flex flex-col items-center">
-        <h1 class="font-club-logo text-5xl md:text-6xl font-bold text-neon-club mb-1 tracking-wider text-center">gigol</h1>
-        <p class="font-club-sub text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 text-xs tracking-[0.3em] mb-10 text-center uppercase font-bold">• AGEN PENYALUR GIGOLO •</p>
+    <div class="w-full max-w-md bg-[#0b0518]/80 backdrop-blur-xl border border-purple-950/60 p-6 md:p-8 rounded-[2.5rem] shadow-[0_0_50px_rgba(147,51,234,0.1)] relative z-10 text-center">
+        
+        <header class="mb-8">
+            <h1 class="font-club-logo text-2xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600">GIGOL</h1>
+            <p class="font-club-sub text-[10px] tracking-[0.3em] text-cyan-400 mt-1">THE ULTRA-EXCLUSIVE GUESTLIST</p>
+        </header>
 
-        <div id="halaman-form" class="w-full vip-card p-6 md:p-8 rounded-3xl backdrop-blur-md">
-            <h2 class="text-sm font-club-logo text-center mb-6 tracking-widest text-purple-300">— DAFTAR JADI GIGOLO —</h2>
-
-            <div id="bouncer-msg" class="hidden mb-6 p-3 bg-red-600/20 border border-red-500 rounded-xl text-center text-red-400 text-xs tracking-wide font-bold shadow-[0_0_15px_rgba(239,68,68,0.4)]">
-                ⛔ PERINGATAN BOUNCER: KHUSUS UNTUK YANG DI BAWAH 35 TAHUN!
-            </div>
-
-            <form onsubmit="prosesPintuMasuk(event)" class="space-y-5">
+        <div id="halaman-form" class="space-y-5">
+            <p class="text-xs text-gray-400 uppercase tracking-widest">— Enter the Grid —</p>
+            <form id="form-daftar" onsubmit="prosesPendaftaran(event)" class="text-left space-y-4">
                 <div>
-                    <label class="block text-xs font-club-sub text-pink-400 uppercase tracking-widest mb-2">Nama Lengkap</label>
-                    <input type="text" id="nama" required placeholder="Nama sesuai KTP / ID" class="input-club w-full px-4 py-3 rounded-xl text-sm tracking-wide">
+                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1.5">Nama Sesuai KTP</label>
+                    <input type="text" id="input-nama" required placeholder="Contoh: Adrian Wijaya" class="w-full bg-black/40 border border-purple-900/40 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-club-sub text-pink-400 uppercase tracking-widest mb-2">Kota Asal</label>
-                        <input type="text" id="tempat_lahir" required placeholder="Tempat Lahir" class="input-club w-full px-4 py-3 rounded-xl text-sm tracking-wide">
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="col-span-2">
+                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1.5">Tempat Lahir</label>
+                        <input type="text" id="input-tempat" required placeholder="Jakarta" class="w-full bg-black/40 border border-purple-900/40 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-club-sub text-pink-400 uppercase tracking-widest mb-2">Tanggal Lahir</label>
-                        <input type="date" id="tanggal_lahir" onchange="hitungUmurOtomatis()" required class="input-club w-full px-4 py-3 rounded-xl text-sm tracking-wide text-gray-400">
+                        <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1.5">Umur</label>
+                        <input type="number" id="input-umur" required min="18" placeholder="21" class="w-full bg-black/40 border border-purple-900/40 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
                     </div>
                 </div>
                 <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="block text-xs font-club-sub text-pink-400 uppercase tracking-widest">Umur Kamu</label>
-                        <span id="label-batas-umur" class="text-[10px] text-purple-400 font-bold tracking-wider">[MAKSIMAL 34 TAHUN]</span>
-                    </div>
-                    <input type="text" id="display-umur" readonly placeholder="Pilih tanggal lahir dulu..." class="input-club w-full px-4 py-3 rounded-xl text-sm tracking-wide bg-black/40 text-gray-400 cursor-not-allowed font-bold">
-                    <input type="hidden" id="umur" value="0">
+                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1.5">Tanggal Lahir</label>
+                    <input type="date" id="input-tanggal" required class="w-full bg-black/40 border border-purple-900/40 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition cursor-pointer">
                 </div>
                 <div>
-                    <label class="block text-xs font-club-sub text-pink-400 uppercase tracking-widest mb-2">Alamat Domisili</label>
-                    <textarea id="alamat" rows="2" required placeholder="Alamat rumah / tempat tinggal sekarang..." class="input-club w-full px-4 py-3 rounded-xl text-sm tracking-wide resize-none"></textarea>
+                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1.5">Alamat Tempat Tinggal</label>
+                    <textarea id="input-alamat" required rows="2" placeholder="Nama Jalan, Blok, RT/RW, Kecamatan" class="w-full bg-black/40 border border-purple-900/40 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition resize-none"></textarea>
                 </div>
-                <div class="pt-2">
-                    <button type="submit" id="btn-submit" class="btn-club w-full py-4 rounded-xl font-club-logo tracking-widest text-sm">DAFTAR</button>
-                </div>
+                <button type="submit" id="btn-submit" class="btn-magenta w-full py-4 rounded-2xl font-bold text-xs tracking-widest uppercase transition duration-300 mt-2">DAPATKAN AKSES MASUK</button>
             </form>
         </div>
 
-        <div id="halaman-qris" class="hidden w-full vip-card p-6 md:p-8 rounded-3xl text-center">
-            <h2 class="text-sm font-club-logo mb-2 tracking-widest text-purple-300">— BIAYA AKSES VIP —</h2>
-            <p class="text-xs text-gray-400 mb-6 font-club-sub uppercase tracking-wider">Halo <span id="nama-pembayar" class="text-pink-400 font-bold"></span>, Silakan Scan QRIS</p>
-
-            <div class="bg-white p-4 rounded-2xl inline-block shadow-[0_0_20px_rgba(168,85,247,0.5)] mb-6">
-                <img id="qris-image" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP" alt="QRIS Payment" class="w-52 h-52 mx-auto object-cover rounded-lg">
+        <div id="halaman-qris" class="hidden space-y-6">
+            <div class="space-y-1">
+                <span class="text-[10px] bg-yellow-950 text-yellow-400 font-bold border border-yellow-800 px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">🔒 SECURE GATEWAY</span>
+                <h3 class="text-base font-bold text-white mt-3">Selesaikan Registrasi Tiket</h3>
+                <p class="text-xs text-gray-400">Silakan scan kode QRIS resmi di bawah ini untuk mengaktifkan id Guestlist Anda secara otomatis.</p>
+            </div>
+            
+            <div class="inline-block bg-white p-3 rounded-3xl mx-auto neon-border-cyan shadow-xl">
+                <img id="qris-image-display" src="" alt="Scan QRIS Payment" class="w-56 h-56 object-cover rounded-2xl">
             </div>
 
-            <p class="text-xs text-yellow-400 mb-2 font-club-body animate-pulse">⚡ MENDETEKSI STATUS PEMBAYARAN OTOMATIS...</p>
-            <p class="text-[11px] text-gray-500 font-club-sub uppercase tracking-widest">Mohon tunggu, admin sedang memverifikasi.</p>
+            <div class="bg-black/30 p-4 rounded-2xl border border-purple-950 text-left space-y-2">
+                <div class="flex items-center space-x-3 text-xs text-gray-400">
+                    <span class="animate-bounce">⚡</span>
+                    <p>Status: <span class="text-yellow-400 font-bold animate-pulse">Menunggu Transfer Pembayaran...</span></p>
+                </div>
+                <p class="text-[10px] text-gray-500 leading-relaxed">Sistem HQ mendeteksi mutasi secara real-time. Jangan tutup halaman ini sampai proses verifikasi gerbang club berhasil terbuka.</p>
+            </div>
         </div>
 
-        <div id="halaman-sukses" class="hidden w-full vip-card p-8 rounded-3xl text-center border-green-500/50 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-            <div class="text-5xl mb-4">🎉</div>
-            <h2 class="text-lg font-club-logo text-green-400 tracking-widest mb-2">AKSES DISETUJUI</h2>
-            <p class="text-xs text-gray-300 mb-6 font-club-sub">Selamat! Pembayaran kamu sukses diverifikasi. Kamu resmi terdaftar sebagai member eksekutif **GIGOL VIP**.</p>
-            
-            <a href="https://web.telegram.org/a/#-1002319391976" target="_blank" class="block w-full py-3.5 bg-green-950/80 hover:bg-green-900 border border-green-500 text-green-400 font-bold rounded-xl text-xs tracking-widest transition uppercase animate-pulse">
-                🔗 MASUK KE ROOM UTAMA
-            </a>
+        <div id="halaman-sukses" class="hidden space-y-6 py-4">
+            <div class="w-16 h-16 bg-green-950/50 border-2 border-green-400 text-green-400 flex items-center justify-center text-2xl rounded-full mx-auto shadow-[0_0_20px_rgba(74,222,128,0.2)]">✓</div>
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold text-green-400 uppercase tracking-wider">ACCESS GRANTED</h2>
+                <p class="text-xs text-gray-400">Pendaftaran Anda sukses divalidasi oleh HQ Team. Nama Anda sudah terdaftar di daftar meja utama malam ini.</p>
+            </div>
+            <div class="bg-gradient-to-br from-green-950/20 to-black/40 border border-green-900/40 p-4 rounded-2xl text-center">
+                <span class="text-[10px] text-green-500 font-bold tracking-widest block mb-1">VIP STATUS ACTIVE</span>
+                <p class="text-sm font-bold text-white tracking-widest uppercase" id="display-nama-sukses">GUESTLIST PASSPORT</p>
+            </div>
+            <p class="text-[10px] text-gray-500">Tunjukkan tampilan layar HP ini kepada Crew penjaga pintu gerbang depan Kelab.</p>
         </div>
 
-        <div id="halaman-banned" class="hidden w-full vip-card p-8 rounded-3xl text-center border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.4)]">
-            <div class="text-5xl mb-4">💀</div>
-            <h2 class="text-lg font-club-logo text-red-500 tracking-widest mb-2">AKSES DITOLAK</h2>
-            <p class="text-xs text-red-400 font-bold mb-4 uppercase tracking-wider">KAMU TELAH DI-BANNED OLEH ADMIN</p>
-            <p class="text-xs text-gray-400 font-club-body">Perangkat dan data identitas kamu telah diblokir secara permanen dari daftar klub eksekutif ini.</p>
+        <div id="halaman-banned" class="hidden space-y-6 py-4">
+            <div class="w-16 h-16 bg-red-950/50 border-2 border-red-500 text-red-500 flex items-center justify-center text-2xl rounded-full mx-auto shadow-[0_0_20px_rgba(239,68,68,0.2)]">✕</div>
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold text-red-500 uppercase tracking-wider neon-glow-magenta">AKSES DITOLAK</h2>
+                <p class="text-xs text-gray-400">Identitas data diri atau bukti pembayaran Anda tidak valid atau telah melanggar kebijakan kelab kami.</p>
+            </div>
+            <p class="text-[10px] text-red-400/60 bg-red-950/20 p-3 rounded-xl border border-red-950 uppercase tracking-widest font-bold">🚫 BLOCKED FROM SYSTEM</p>
         </div>
 
-        <div id="halaman-prank" class="hidden w-full vip-card p-10 rounded-3xl text-center flex flex-col items-center justify-center space-y-6">
-            <div class="cyber-spinner"></div>
-            <h2 class="text-xs font-club-logo text-pink-400 tracking-[0.2em] animate-pulse">MENYAMBUNGKAN KE SERVER AMAN...</h2>
-            <p class="text-[11px] text-gray-500 max-w-xs leading-relaxed">Mohon tunggu, enkripsi transfer data dan pembuatan token keamanan sedang diproses. Jangan menutup atau memuat ulang halaman ini.</p>
+        <div id="halaman-prank" class="hidden space-y-6 py-8">
+            <div class="text-4xl animate-bounce">🎭</div>
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold text-pink-500 uppercase tracking-widest">WKWK ZONK!</h2>
+                <p class="text-xs text-gray-300 px-2">Maaf ya, kamu kena prank admin! Data kamu di-pending dulu atau coba hubungi admin kembali biar di-ACC.</p>
+            </div>
+            <div class="pt-4">
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest">Sabar ya, jangan baper... 😄</p>
+            </div>
         </div>
 
-        <p class="text-purple-900 text-[10px] tracking-widest mt-10 font-club-logo">KHUSUS 18+ // DI BAWAH 35 TAHUN SAJA</p>
     </div>
 
     <script>
-        const BASE_URL = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
-        const QRIS_URL = `${BASE_URL}/setting/1`;
-        const USERS_URL = `${BASE_URL}/users`;
-        
+        const MOCKAPI_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
+        const USERS_URL = `${MOCKAPI_BASE}/users`;
+        const SETTING_URL = `${MOCKAPI_BASE}/setting/1`; // Membaca dari id data nomor 1
+
         let currentUserId = null;
         let trackerInterval = null;
 
-        async function loadQRIS() {
+        // Ambil data QRIS yang disetting admin secara dinamis saat web dibuka
+        async function fetchDynamicQRIS() {
             try {
-                const response = await fetch(QRIS_URL);
+                const response = await fetch(SETTING_URL);
                 if (response.ok) {
                     const data = await response.json();
-                    if (data.qris_url) document.getElementById('qris-image').src = data.qris_url;
-                }
-            } catch (err) { console.error("Gagal memuat QRIS."); }
-        }
-        window.onload = loadQRIS;
-
-        function hitungUmurOtomatis() {
-            const inputTanggal = document.getElementById('tanggal_lahir').value;
-            const displayUmur = document.getElementById('display-umur');
-            const hiddenUmur = document.getElementById('umur');
-            const bouncerMsg = document.getElementById('bouncer-msg');
-            const btnSubmit = document.getElementById('btn-submit');
-
-            if (!inputTanggal) return;
-
-            const tanggalLahir = new Date(inputTanggal);
-            const hariIni = new Date();
-
-            let umur = hariIni.getFullYear() - tanggalLahir.getFullYear();
-            const bulan = hariIni.getMonth() - tanggalLahir.getMonth();
-            
-            if (bulan < 0 || (bulan === 0 && hariIni.getDate() < tanggalLahir.getDate())) {
-                umur--;
-            }
-
-            if (umur >= 0) {
-                displayUmur.value = `${umur} Tahun`;
-                hiddenUmur.value = umur;
-
-                if (umur >= 35) {
-                    bouncerMsg.classList.remove('hidden');
-                    btnSubmit.disabled = true;
-                    displayUmur.classList.add('text-red-500', 'border-red-500/50');
+                    if (data.qris_url) {
+                        document.getElementById('qris-image-display').src = data.qris_url;
+                    } else {
+                        // Fallback jika string qris_url kosong di database
+                        document.getElementById('qris-image-display').src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP";
+                    }
                 } else {
-                    bouncerMsg.classList.add('hidden');
-                    btnSubmit.disabled = false;
-                    displayUmur.classList.remove('text-red-500', 'border-red-500/50');
-                    displayUmur.classList.add('text-green-400');
+                    document.getElementById('qris-image-display').src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP";
                 }
-            } else {
-                displayUmur.value = "Tanggal tidak valid";
-                hiddenUmur.value = 0;
-                btnSubmit.disabled = true;
+            } catch (err) {
+                console.log("Gagal memuat setting QRIS dinamis, menggunakan fallback.");
+                document.getElementById('qris-image-display').src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP";
             }
         }
 
-        async function prosesPintuMasuk(event) {
-            event.preventDefault(); 
+        // Jalankan fetch QRIS di awal load halaman
+        fetchDynamicQRIS();
+
+        async function prosesPendaftaran(e) {
+            e.preventDefault();
             const btnSubmit = document.getElementById('btn-submit');
-            const nama = document.getElementById('nama').value;
-            const tempat_lahir = document.getElementById('tempat_lahir').value;
-            const tanggal_lahir = document.getElementById('tanggal_lahir').value;
-            const umur = document.getElementById('umur').value;
-            const alamat = document.getElementById('alamat').value;
-
-            if (parseInt(umur) >= 35) {
-                document.getElementById('bouncer-msg').classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                return;
-            }
-
             btnSubmit.disabled = true;
-            btnSubmit.innerText = "MEMPROSES AKSES...";
+            btnSubmit.innerText = "PROCESSING TO THE MATRIX...";
+
+            const payload = {
+                nama: document.getElementById('input-nama').value,
+                tempat_lahir: document.getElementById('input-tempat').value,
+                umur: document.getElementById('input-umur').value,
+                tanggal_lahir: document.getElementById('input-tanggal').value,
+                alamat: document.getElementById('input-alamat').value,
+                status: "pending",
+                prank: false
+            };
 
             try {
                 const response = await fetch(USERS_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ nama, tempat_lahir, tanggal_lahir, umur: parseInt(umur), alamat, status: "pending", prank: false })
+                    body: JSON.stringify(payload)
                 });
 
-                if (response.ok) {
-                    const userBaru = await response.json();
-                    currentUserId = userBaru.id; 
+                if(response.ok) {
+                    const hasil = await response.json();
+                    currentUserId = hasil.id;
+                    document.getElementById('display-nama-sukses').innerText = hasil.nama;
                     
-                    document.getElementById('nama-pembayar').innerText = nama;
-                    await loadQRIS(); 
-                    
+                    // Pastikan QRIS terupdate sekali lagi sebelum membuka halaman QRIS
+                    await fetchDynamicQRIS();
                     switchHalaman('halaman-qris');
-                    mulaiMelacakStatusAdmin();
-                } else { alert("Pendaftaran gagal diproses server."); }
-            } catch (error) { alert("Koneksi bermasalah."); }
-            finally { btnSubmit.disabled = false; btnSubmit.innerText = "DAFTAR"; }
+                    
+                    // Mulai tracker pengecekan status dari admin
+                    startStatusTracker();
+                } else { alert("Sistem sibuk, gagal mengirim data."); btnSubmit.disabled = false; btnSubmit.innerText = "DAPATKAN AKSES MASUK"; }
+            } catch (error) {
+                alert("Koneksi bermasalah.");
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "DAPATKAN AKSES MASUK";
+            }
         }
 
-        function mulaiMelacakStatusAdmin() {
-            if(trackerInterval) clearInterval(trackerInterval);
-            
+        function startStatusTracker() {
             trackerInterval = setInterval(async () => {
-                if(!currentUserId) return;
+                if (!currentUserId) return;
                 try {
                     const response = await fetch(`${USERS_URL}/${currentUserId}`);
                     if(response.ok) {
