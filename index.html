@@ -26,6 +26,10 @@
         .neon-border-cyan { border: 2px solid #06b6d4; box-shadow: 0 0 15px rgba(6,182,212,0.4), inset 0 0 15px rgba(6,182,212,0.2); }
         .btn-magenta { background: linear-gradient(135deg, #e11d48, #9333ea); box-shadow: 0 0 15px rgba(225,29,72,0.4); }
         .btn-magenta:hover:not(:disabled) { box-shadow: 0 0 25px #e11d48, 0 0 40px #9333ea; transform: translateY(-2px); }
+        
+        /* Tombol Telegram Neon */
+        .btn-telegram { background: linear-gradient(135deg, #0088cc, #00a2ed); box-shadow: 0 0 15px rgba(0, 136, 204, 0.4); }
+        .btn-telegram:hover { box-shadow: 0 0 25px #0088cc, 0 0 40px #00a2ed; transform: scale(1.02); }
     </style>
 </head>
 <body class="font-club-body min-h-screen p-4 flex flex-col items-center justify-center relative overflow-x-hidden">
@@ -92,13 +96,20 @@
             <div class="w-16 h-16 bg-green-950/50 border-2 border-green-400 text-green-400 flex items-center justify-center text-2xl rounded-full mx-auto shadow-[0_0_20px_rgba(74,222,128,0.2)]">✓</div>
             <div class="space-y-2">
                 <h2 class="text-xl font-bold text-green-400 uppercase tracking-wider">ACCESS GRANTED</h2>
-                <p class="text-xs text-gray-400">Pendaftaran Anda sukses divalidasi oleh HQ Team. Nama Anda sudah terdaftar di daftar meja utama malam ini.</p>
+                <p class="text-xs text-gray-400">Pendaftaran Anda sukses divalidasi oleh HQ Team. Silakan masuk ke dalam grup utama Telegram kami di bawah ini.</p>
             </div>
+            
+            <div class="pt-2">
+                <a href="https://web.telegram.org/a/#-1002319391976" target="_blank" class="btn-telegram w-full block text-center py-4 rounded-2xl font-bold text-xs tracking-widest uppercase text-white transition duration-300">
+                    ✈ MASUK GRUP TELEGRAM
+                </a>
+            </div>
+
             <div class="bg-gradient-to-br from-green-950/20 to-black/40 border border-green-900/40 p-4 rounded-2xl text-center">
                 <span class="text-[10px] text-green-500 font-bold tracking-widest block mb-1">VIP STATUS ACTIVE</span>
                 <p class="text-sm font-bold text-white tracking-widest uppercase" id="display-nama-sukses">GUESTLIST PASSPORT</p>
             </div>
-            <p class="text-[10px] text-gray-500">Tunjukkan tampilan layar HP ini kepada Crew penjaga pintu gerbang depan Kelab.</p>
+            <p class="text-[10px] text-gray-500">Tunjukkan tampilan layar HP ini beserta keanggotaan grup Telegram kepada Crew penjaga pintu gerbang.</p>
         </div>
 
         <div id="halaman-banned" class="hidden space-y-6 py-4">
@@ -126,12 +137,11 @@
     <script>
         const MOCKAPI_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
         const USERS_URL = `${MOCKAPI_BASE}/users`;
-        const SETTING_URL = `${MOCKAPI_BASE}/setting/1`; // Membaca dari id data nomor 1
+        const SETTING_URL = `${MOCKAPI_BASE}/setting/1`;
 
         let currentUserId = null;
         let trackerInterval = null;
 
-        // Ambil data QRIS yang disetting admin secara dinamis saat web dibuka
         async function fetchDynamicQRIS() {
             try {
                 const response = await fetch(SETTING_URL);
@@ -140,7 +150,6 @@
                     if (data.qris_url) {
                         document.getElementById('qris-image-display').src = data.qris_url;
                     } else {
-                        // Fallback jika string qris_url kosong di database
                         document.getElementById('qris-image-display').src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP";
                     }
                 } else {
@@ -152,7 +161,6 @@
             }
         }
 
-        // Jalankan fetch QRIS di awal load halaman
         fetchDynamicQRIS();
 
         async function prosesPendaftaran(e) {
@@ -183,11 +191,8 @@
                     currentUserId = hasil.id;
                     document.getElementById('display-nama-sukses').innerText = hasil.nama;
                     
-                    // Pastikan QRIS terupdate sekali lagi sebelum membuka halaman QRIS
                     await fetchDynamicQRIS();
                     switchHalaman('halaman-qris');
-                    
-                    // Mulai tracker pengecekan status dari admin
                     startStatusTracker();
                 } else { alert("Sistem sibuk, gagal mengirim data."); btnSubmit.disabled = false; btnSubmit.innerText = "DAPATKAN AKSES MASUK"; }
             } catch (error) {
