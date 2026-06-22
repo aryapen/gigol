@@ -3,100 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-RESIDENCE Panel Admin - Manajemen Booking</title>
+    <title>E-RESIDENCE Super Controller Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700&family=Syncopate:wght=700&display=swap');
         body {
-            background-color: #090f0d;
+            background-color: #040807;
             color: #f3f4f6;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syncopate:wght@700&display=swap');
-        
         .font-logo { font-family: 'Syncopate', sans-serif; }
-        
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #0d1613;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #10b981;
-            border-radius: 3px;
-        }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #09120f; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #059669; border-radius: 4px; }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col gap-6 max-w-6xl mx-auto">
 
     <!-- HEADER PANEL -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0d1613] p-6 rounded-2xl border border-emerald-950 shadow-xl">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#09120f] p-6 rounded-2xl border border-emerald-950 shadow-2xl">
         <div>
-            <h1 class="font-logo text-lg font-bold tracking-widest text-emerald-400">E-RESIDENCE CONTROLLER</h1>
-            <p class="text-xs text-gray-400 mt-1">Sistem Manajemen Booking Kamar & Validasi Pembayaran QRIS</p>
+            <h1 class="font-logo text-base md:text-lg font-bold tracking-widest text-emerald-400">E-RESIDENCE CONTROLLER v2</h1>
+            <p class="text-xs text-gray-400 mt-0.5">Pantau Nominal Keuangan, Durasi Sewa Jam, & Validasi QRIS Aktif</p>
         </div>
-        <div class="flex items-center gap-2">
-            <button onclick="fetchDataUser()" class="px-4 py-2 bg-emerald-900/60 hover:bg-emerald-800 text-emerald-400 font-semibold text-xs rounded-xl border border-emerald-700/50 transition flex items-center gap-1.5">
+        <div class="flex flex-wrap items-center gap-4">
+            <!-- TOTAL CASH CALCULATOR -->
+            <div class="bg-black/40 border border-emerald-900/40 px-4 py-2 rounded-xl text-right">
+                <p class="text-[10px] uppercase text-gray-400 tracking-wider">Total Pendapatan Ter-Approve</p>
+                <p class="text-base font-bold text-emerald-400" id="total-revenue">Rp 0</p>
+            </div>
+            <button onclick="fetchSemuaData()" class="px-4 py-2.5 bg-emerald-900/40 hover:bg-emerald-800 text-emerald-400 font-bold text-xs rounded-xl border border-emerald-700/40 transition flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.253 8H18"></path></svg>
-                REFRESH DATA
+                REFRESH SYSTEM
             </button>
         </div>
     </header>
 
-    <!-- MAIN GRID -->
+    <!-- CONTENT MATRIX -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- KOLOM KIRI: KONFIGURASI QRIS -->
-        <div class="lg:col-span-1 bg-[#0d1613] p-6 rounded-2xl border border-emerald-950 shadow-xl flex flex-col gap-4">
+        <!-- KOLOM KIRI: SET QRIS & MONITOR -->
+        <div class="lg:col-span-1 bg-[#09120f] p-6 rounded-2xl border border-emerald-950 shadow-xl flex flex-col gap-5">
             <div>
-                <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-400">Konfigurasi Pembayaran</h2>
-                <p class="text-[11px] text-gray-400">Atur URL foto QRIS aktif untuk ditayangkan ke user</p>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Pusat Link QRIS Pembayaran</h2>
+                <p class="text-[11px] text-gray-400">Masukkan link gambar barcode QRIS yang akan di-scan oleh user</p>
             </div>
             
             <div class="space-y-3">
                 <div>
-                    <label class="block text-[11px] text-gray-400 uppercase tracking-wider mb-1">URL Link Gambar QRIS</label>
-                    <input type="text" id="input-qris-url" placeholder="https://link-gambar-qris.png" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
+                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Direct Link Foto QRIS</label>
+                    <input type="text" id="admin-qris-url" placeholder="https://image-hosting.com/qris.jpg" class="w-full bg-black/50 border border-emerald-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
-                <button onclick="updateQRISSetting()" id="btn-save-qris" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wider rounded-xl transition uppercase shadow-md">
-                    SIMPAN QRIS BARU
+                <button onclick="simpanQRISBaru()" id="btn-save-qris" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wider rounded-xl transition uppercase shadow">
+                    SIMPAN & SEBARKAN QRIS
                 </button>
             </div>
 
-            <div class="border-t border-emerald-950/60 pt-4 mt-2">
-                <label class="block text-[11px] text-gray-400 uppercase tracking-wider mb-2">Pratinjau QRIS Aktif:</label>
-                <div class="bg-white p-3 rounded-xl max-w-[180px] mx-auto aspect-square flex items-center justify-center overflow-hidden border border-emerald-900/30">
-                    <img id="preview-qris" src="" alt="Belum Diatur" class="w-full h-full object-contain text-black text-[10px] text-center">
+            <div class="border-t border-emerald-950/60 pt-4">
+                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-2">QRIS Menghadap User Saat Ini:</label>
+                <div class="bg-white p-3 rounded-xl max-w-[170px] mx-auto aspect-square flex items-center justify-center overflow-hidden border border-emerald-900/20">
+                    <img id="admin-preview-qris" src="" alt="Tidak Ada QR" class="w-full h-full object-contain">
                 </div>
             </div>
         </div>
 
-        <!-- KOLOM KANAN: DAFTAR CALON PENGHUNI KOS -->
-        <div class="lg:col-span-2 bg-[#0d1613] p-6 rounded-2xl border border-emerald-950 shadow-xl flex flex-col gap-4">
-            <div class="flex items-center justify-between">
+        <!-- KOLOM KANAN: TABEL KENDALI ANTRIAN REALTIME -->
+        <div class="lg:col-span-2 bg-[#09120f] p-6 rounded-2xl border border-emerald-950 shadow-xl flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-emerald-950/60 pb-3">
                 <div>
-                    <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-400">Antrean Reservasi Kamar</h2>
-                    <p class="text-[11px] text-gray-400">Daftar user yang mengajukan booking secara real-time</p>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Manajemen Antrean & Pembayaran Sewa</h2>
+                    <p class="text-[11px] text-gray-400">Klik ACC QR untuk memunculkan barcode di halaman tunggu penyewa</p>
                 </div>
-                <span id="total-badge" class="px-2.5 py-0.5 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-full text-[10px] font-bold">0 Data</span>
+                <span id="data-counter" class="px-3 py-0.5 bg-black text-emerald-400 border border-emerald-900 rounded-full text-[10px] font-mono font-bold">0 Users</span>
             </div>
 
-            <!-- TABLE CONTAINER -->
-            <div class="overflow-x-auto custom-scrollbar border border-emerald-950/60 rounded-xl bg-black/20">
-                <table class="w-full text-left text-xs min-w-[600px]">
-                    <thead class="bg-black/40 text-emerald-400 uppercase text-[10px] tracking-wider border-b border-emerald-950">
+            <!-- TABLE -->
+            <div class="overflow-x-auto custom-scrollbar border border-emerald-950 rounded-xl bg-black/20">
+                <table class="w-full text-left text-xs min-w-[650px]">
+                    <thead class="bg-black/50 text-emerald-400 uppercase text-[9px] tracking-wider border-b border-emerald-950">
                         <tr>
                             <th class="p-3">Calon Penghuni</th>
-                            <th class="p-3">Kontak WA</th>
-                            <th class="p-3">Detail TTL & Umur</th>
+                            <th class="p-3">WhatsApp</th>
+                            <th class="p-3">Durasi Jam</th>
+                            <th class="p-3">Nominal Uang</th>
                             <th class="p-3 text-center">Status</th>
-                            <th class="p-3 text-center">Aksi Kendali</th>
+                            <th class="p-3 text-center">Aksi Operasi</th>
                         </tr>
                     </thead>
-                    <tbody id="table-user-rows" class="divide-y divide-emerald-950/40">
+                    <tbody id="admin-table-body" class="divide-y divide-emerald-950/30">
                         <tr>
-                            <td colspan="5" class="p-6 text-center text-gray-500">Memuat data dari server...</td>
+                            <td colspan="6" class="p-6 text-center text-gray-600">Sinkronisasi data database server...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -106,167 +105,168 @@
     </div>
 
     <script>
-        const MOCKAPI_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
-        const USERS_URL = `${MOCKAPI_BASE}/users`;
-        const SETTING_URL = `${MOCKAPI_BASE}/setting/1`;
-
+        const API_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
+        
         window.addEventListener('DOMContentLoaded', () => {
-            fetchQRISSetting();
-            fetchDataUser();
-            setInterval(fetchDataUser, 4000); // Sinkronisasi otomatis berkala
+            loadQRISSetting();
+            fetchSemuaData();
+            setInterval(fetchSemuaData, 4000); // Polling otomatis setiap 4 detik
         });
 
-        async function fetchQRISSetting() {
+        async function loadQRISSetting() {
             try {
-                const response = await fetch(SETTING_URL);
-                if (response.ok) {
-                    const setting = await response.json();
-                    document.getElementById('input-qris-url').value = setting.qris_url || "";
-                    document.getElementById('preview-qris').src = setting.qris_url || "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=DefaultKos";
+                const res = await fetch(`${API_BASE}/setting/1`);
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('admin-qris-url').value = data.qris_url || "";
+                    document.getElementById('admin-preview-qris').src = data.qris_url || "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=Default";
                 }
-            } catch (err) {
-                console.error("Gagal mengambil konfigurasi QRIS:", err);
-            }
+            } catch (e) { console.log(e); }
         }
 
-        async function updateQRISSetting() {
+        async function simpanQRISBaru() {
             const btn = document.getElementById('btn-save-qris');
-            const qrisUrl = document.getElementById('input-qris-url').value;
-            
-            btn.disabled = true;
-            btn.innerText = "MENYIMPAN...";
-
+            const url = document.getElementById('admin-qris-url').value.trim();
+            btn.disabled = true; btn.innerText = "MENYIMPAN...";
             try {
-                const response = await fetch(SETTING_URL, {
+                const res = await fetch(`${API_BASE}/setting/1`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ qris_url: qrisUrl })
+                    body: JSON.stringify({ qris_url: url })
                 });
-
-                if (response.ok) {
-                    alert("Link QRIS Pembayaran Berhasil Diperbarui!");
-                    document.getElementById('preview-qris').src = qrisUrl;
-                } else {
-                    alert("Gagal memperbarui QRIS di server.");
+                if (res.ok) {
+                    alert("QRIS Berhasil Diperbarui!");
+                    document.getElementById('admin-preview-qris').src = url;
                 }
-            } catch (err) {
-                alert("Terjadi masalah koneksi jaringan.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "SIMPAN QRIS BARU";
-            }
+            } catch (err) { alert("Masalah jaringan"); }
+            finally { btn.disabled = false; btn.innerText = "SIMPAN & SEBARKAN QRIS"; }
         }
 
-        async function fetchDataUser() {
+        async function fetchSemuaData() {
             try {
-                const response = await fetch(USERS_URL);
-                if (!response.ok) return;
+                const res = await fetch(`${API_BASE}/users`);
+                if (!res.ok) return;
+                const users = await res.json();
                 
-                const users = await response.json();
                 users.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+                document.getElementById('data-counter').innerText = `${users.length} Users`;
                 
-                document.getElementById('total-badge').innerText = `${users.length} Data`;
-                renderTableRows(users);
-            } catch (err) {
-                console.log("Gagal menyinkronkan data antrean.");
-            }
+                // Hitung akumulasi uang masuk ter-approve
+                let totalCuan = 0;
+                users.forEach(u => {
+                    if (u.status === "sukses" && u.id_kamar) {
+                        const cleanNum = parseInt(u.id_kamar.replace(/[^0-9]/g, ''));
+                        if (!isNaN(cleanNum)) totalCuan += cleanNum;
+                    }
+                });
+                document.getElementById('total-revenue').innerText = `Rp ${totalCuan.toLocaleString('id-ID')}`;
+                
+                renderTabelKendali(users);
+            } catch (e) { console.log("Gagal menyinkronkan data."); }
         }
 
-        function renderTableRows(users) {
-            const tbody = document.getElementById('table-user-rows');
+        function renderTabelKendali(users) {
+            const tbody = document.getElementById('admin-table-body');
             if (users.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-500">Belum ada calon penghuni yang mendaftar.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500">Belum ada transaksi masuk dari user.</td></tr>`;
                 return;
             }
 
-            let html = "";
+            let rowsHtml = "";
             users.forEach(user => {
-                let whatsappClean = "-";
-                if (user.alamat) {
-                    whatsappClean = user.alamat.replace(/[\[\]]/g, '');
+                let waClean = "-";
+                if (user.alamat) { waClean = user.alamat.replace(/[\[\]]/g, ''); }
+
+                let durasiDisplay = "2 Jam";
+                if (user.status && user.status.includes("waiting_")) {
+                    durasiDisplay = user.status.replace("waiting_", "").replace("h", " Jam");
+                } else if (user.status === "sukses" || user.status === "tolak") {
+                    durasiDisplay = "Terproses";
                 }
 
-                let statusClass = "bg-amber-950/60 text-amber-400 border-amber-800/60";
-                if (user.status === "sukses") statusClass = "bg-emerald-950 text-emerald-400 border-emerald-800";
-                if (user.status === "banned" || user.status === "tolak") statusClass = "bg-red-950 text-red-400 border-red-900";
+                let badgeStyle = "bg-amber-950/60 text-amber-400 border-amber-800/50";
+                let readableStatus = "MENUNGGU QR";
+                
+                if (user.status === "sukses") {
+                    badgeStyle = "bg-emerald-950 text-emerald-400 border-emerald-800";
+                    readableStatus = "APPROVED (SCAN)";
+                } else if (user.status === "tolak") {
+                    badgeStyle = "bg-red-950 text-red-400 border-red-900";
+                    readableStatus = "DITOLAK";
+                }
 
                 const isPrankActive = user.prank === true || user.prank === "true";
-                let prankBtnClass = isPrankActive ? "bg-purple-600 text-white border-purple-400" : "bg-purple-950/40 text-purple-400 border-purple-900/60 hover:bg-purple-900/40";
+                let prankStyle = isPrankActive ? "bg-purple-600 text-white border-purple-400" : "bg-purple-950 text-purple-400 border-purple-900/60 hover:bg-purple-900";
 
-                html += `
+                rowsHtml += `
                     <tr class="hover:bg-emerald-950/10 transition">
-                        <td class="p-3 font-semibold text-white">${user.nama}</td>
-                        <td class="p-3 font-mono text-emerald-300">
-                            <a href="https://wa.me/${whatsappClean.replace(/^0/, '62')}" target="_blank" class="hover:underline flex items-center gap-1">
-                                ${whatsappClean}
-                                <svg class="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        <td class="p-3 font-semibold text-white">
+                            ${user.nama}<br>
+                            <span class="text-[10px] text-gray-500 font-normal">${user.tempat_lahir}, ${user.umur} Thn</span>
+                        </td>
+                        <td class="p-3 font-mono text-emerald-400">
+                            <a href="https://wa.me/${waClean.replace(/^0/, '62')}" target="_blank" class="hover:underline inline-flex items-center gap-1">
+                                ${waClean}
+                                <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             </a>
                         </td>
-                        <td class="p-3 text-gray-400 leading-tight">
-                            ${user.tempat_lahir}, ${user.tanggal_lahir}<br>
-                            <span class="text-[10px] text-gray-500">Umur: ${user.umur} Tahun</span>
-                        </td>
+                        <td class="p-3 font-medium text-gray-300">${durasiDisplay}</td>
+                        <td class="p-3 font-bold text-emerald-400">${user.id_kamar || 'Rp 0'}</td>
                         <td class="p-3 text-center">
-                            <span class="px-2 py-0.5 border rounded-full text-[10px] font-medium tracking-wide ${statusClass}">
-                                ${user.status.toUpperCase()}
+                            <span class="px-2.5 py-0.5 border rounded-full text-[9px] font-bold tracking-wide ${badgeStyle}">
+                                ${readableStatus}
                             </span>
                         </td>
                         <td class="p-3">
-                            <div class="flex items-center justify-center gap-1.5">
-                                <button onclick="updateUserAction('${user.id}', 'sukses', ${user.prank})" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold rounded-lg transition shadow">
-                                    APPROVE
+                            <div class="flex items-center justify-center gap-1">
+                                <button onclick="eksekusiStatus('${user.id}', 'sukses', ${user.prank})" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold rounded-md transition shadow">
+                                    ACC QR
                                 </button>
-                                <button onclick="updateUserAction('${user.id}', 'tolak', ${user.prank})" class="px-2 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-bold rounded-lg transition shadow">
+                                <button onclick="eksekusiStatus('${user.id}', 'tolak', ${user.prank})" class="px-2 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-bold rounded-md transition shadow">
                                     TOLAK
                                 </button>
-                                <button onclick="togglePrank('${user.id}', ${isPrankActive}, '${user.status}')" class="px-2 py-1 border text-[10px] font-bold rounded-lg transition shadow ${prankBtnClass}">
-                                    ${isPrankActive ? '💥 ACTIVE' : 'PRANK'}
+                                <button onclick="triggerPrank('${user.id}', ${isPrankActive}, '${user.status}')" class="px-1.5 py-1 border text-[10px] font-bold rounded-md transition ${prankStyle}">
+                                    ${isPrankActive ? '💥 RICK' : 'PRANK'}
                                 </button>
-                                <button onclick="deleteUser('${user.id}')" class="px-2 py-1 bg-black hover:bg-gray-900 border border-gray-800 text-gray-400 hover:text-red-400 text-[10px] font-bold rounded-lg transition">
-                                    HAPUS
+                                <button onclick="hapusUser('${user.id}')" class="px-1.5 py-1 bg-black border border-gray-800 text-gray-500 hover:text-red-400 text-[10px] rounded-md transition">
+                                    ✕
                                 </button>
                             </div>
                         </td>
                     </tr>
                 `;
             });
-            tbody.innerHTML = html;
+            tbody.innerHTML = rowsHtml;
         }
 
-        async function updateUserAction(id, statusTarget, currentPrank) {
+        async function eksekusiStatus(id, target, prankValue) {
             try {
-                await fetch(`${USERS_URL}/${id}`, {
+                await fetch(`${API_BASE}/users/${id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ status: statusTarget, prank: currentPrank })
+                    body: JSON.stringify({ status: target, prank: prankValue })
                 });
-                fetchDataUser();
-            } catch (err) {
-                alert("Gagal memperbarui status data.");
-            }
+                fetchSemuaData();
+            } catch(e) { alert("Gagal memperbarui status."); }
         }
 
-        async function togglePrank(id, currentPrankState, currentStatus) {
+        async function triggerPrank(id, currentPrank, currentStatus) {
             try {
-                await fetch(`${USERS_URL}/${id}`, {
+                await fetch(`${API_BASE}/users/${id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ status: currentStatus, prank: !currentPrankState })
+                    body: JSON.stringify({ status: currentStatus, prank: !currentPrank })
                 });
-                fetchDataUser();
-            } catch (err) {
-                alert("Gagal mengubah status aksi prank.");
-            }
+                fetchSemuaData();
+            } catch(e) { alert("Gagal"); }
         }
 
-        async function deleteUser(id) {
-            if (!confirm("Apakah Anda yakin ingin menghapus riwayat data booking ini?")) return;
+        async function hapusUser(id) {
+            if(!confirm("Hapus data reservasi ini?")) return;
             try {
-                await fetch(`${USERS_URL}/${id}`, { method: "DELETE" });
-                fetchDataUser();
-            } catch (err) {
-                alert("Gagal menghapus data dari server.");
-            }
+                await fetch(`${API_BASE}/users/${id}`, { method: "DELETE" });
+                fetchSemuaData();
+            } catch(e) { alert("Gagal menghapus"); }
         }
     </script>
 </body>
