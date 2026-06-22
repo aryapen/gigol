@@ -114,7 +114,7 @@
         const USERS_URL = `${MOCKAPI_BASE}/users`;
         const SETTING_URL = `${MOCKAPI_BASE}/setting/1`;
         
-        // Integrasi API Key FreeImage Baru
+        // Integrasi API Key FreeImage Utama
         const FREEIMAGE_API_KEY = "6d207e02198a847aa98d0a2a901485a5"; 
 
         let pollingInterval = null;
@@ -167,7 +167,7 @@
             } catch (e) { console.log("Load QRIS gagal..."); }
         }
 
-        // FUNGSI UPLOAD DI-KONFIGURASI ULANG UNTUK LAYANAN FREEIMAGE API
+        // FUNGSI UPLOAD TOTAL PENANGANAN MULTI-FORMAT JSON FREEIMAGE
         async function uploadQRISBaru(e) {
             e.preventDefault();
             const fileInput = document.getElementById('input-file-qris');
@@ -185,27 +185,35 @@
             formData.append("image", fileInput.files[0]);
 
             try {
-                // Menembak endpoint API unggah resmi milik FreeImage
+                // Eksekusi POST ke server gambar FreeImage
                 const fiResp = await fetch(`https://freeimage.host/api/1/upload?key=${FREEIMAGE_API_KEY}`, {
                     method: "POST",
                     body: formData
                 });
-                const fiResult = await fiResp.json();
                 
-                // Mengurai struktur respon JSON unik dari FreeImage (.image.url)
-                if (fiResult.status_code !== 200 || !fiResult.image || !fiResult.image.url) {
-                    throw new Error("FreeImage API rejection");
+                const fiResult = await fiResp.json();
+                console.log("Response Log Cloud:", fiResult);
+
+                // Fallback pencarian jalur link direct gambar internal objek
+                let directUrl = null;
+                if (fiResult && fiResult.image) {
+                    directUrl = fiResult.image.url || fiResult.image.display_url || (fiResult.image.file ? fiResult.image.file.url : null);
                 }
-                const directUrl = fiResult.image.url;
+
+                if (!directUrl) {
+                    throw new Error("Struktur parameter JSON tidak terdefinisi.");
+                }
 
                 statusMsg.innerText = "⚡ STEP 2: SYNCHRONIZING MOCKAPI DATABASE...";
 
+                // Mengirimkan pembaruan URL gambar menuju MockAPI setting/1
                 const mockResp = await fetch(SETTING_URL, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ qris_url: directUrl })
                 });
 
+                // Antisipasi apabila dokumen ID 1 belum terinisialisasi di MockAPI
                 if (!mockResp.ok) {
                     await fetch(`${MOCKAPI_BASE}/setting`, {
                         method: "POST",
@@ -220,9 +228,9 @@
                 fileInput.value = "";
 
             } catch (error) {
-                console.error(error);
+                console.error("Detail Log Ringkas Error:", error);
                 statusMsg.className = "text-[10px] text-center font-bold tracking-wide mt-2 text-red-500 block";
-                statusMsg.innerText = "❌ OVERWRITE DATA GAGAL! PERIKSA UKURAN GAMBAR ATAU KONEKSI.";
+                statusMsg.innerText = "❌ OVERWRITE DATA GAGAL! PERIKSA CONSOLE LOG BROWSER (F12).";
             } finally {
                 btn.disabled = false;
                 btn.innerText = "UPDATE QRIS IMAGE";
