@@ -6,7 +6,7 @@
     <title>E-RESIDENCE - Luxury Living Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=500;700&family=Inter:wght=300;400;500;600;700&display=swap');
         body {
             background-color: #121414;
             color: #E2E8F0;
@@ -61,9 +61,12 @@
                 <div>
                     <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1 font-medium">Durasi Sewa Kamar / Unit</label>
                     <select id="reg-durasi" class="w-full bg-[#121414] border border-[#2C3030] rounded-xl px-3.5 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] appearance-none cursor-pointer">
-                        <option value="2h">Sewa Singkat (2 Jam) — Rp 50.000</option>
-                        <option value="3h">Sewa Santai (3 Jam) — Rp 75.000</option>
-                        <option value="24h">Sewa Penuh (1 Hari / 24 Jam) — Rp 200.000</option>
+                        <option value="2h">Sewa Kilat (2 Jam) — Rp 50.000</option>
+                        <option value="4h">Sewa Singkat (4 Jam) — Rp 100.000</option>
+                        <option value="6h">Sewa Setengah Hari (6 Jam) — Rp 150.000</option>
+                        <option value="12h">Sewa Transit (12 Jam) — Rp 275.000</option>
+                        <option value="24h">Sewa Full Day (24 Jam) — Rp 450.000</option>
+                        <option value="48h">Sewa Long Stay (48 Jam / 2 Hari) — Rp 850.000</option>
                     </select>
                 </div>
 
@@ -89,7 +92,7 @@
             </div>
         </section>
 
-        <!-- SCREEN 3: GATEWAY PEMBAYARAN QRIS (FIXED NO-CROP) -->
+        <!-- SCREEN 3: GATEWAY PEMBAYARAN QRIS (PROPORSIONAL NO-CROP) -->
         <section id="screen-qris" class="hidden text-center space-y-5">
             <div>
                 <span class="px-3 py-1 bg-amber-950 text-amber-400 border border-amber-900 rounded-full text-[9px] font-bold uppercase tracking-wider">Tahap Pembayaran</span>
@@ -97,7 +100,7 @@
                 <p class="text-xs text-gray-400">Silakan scan QRIS resmi di bawah ini menggunakan e-wallet atau m-banking</p>
             </div>
 
-            <!-- PERBAIKAN WADAH QRIS: Fleksibel, proporsional, tidak memotong gambar -->
+            <!-- Wadah QRIS Fleksibel agar tidak terpotong -->
             <div class="bg-white p-3 rounded-xl w-64 mx-auto border border-gray-200 shadow-inner flex items-center justify-center">
                 <img id="img-qris" src="" alt="QRIS" class="w-full h-auto max-h-[350px] object-contain rounded-lg block">
             </div>
@@ -121,7 +124,7 @@
                 <p class="text-xs text-emerald-400 font-medium">Tiket Akses Digital Anda Telah Aktif</p>
             </div>
 
-            <!-- KARTU TIKET NYATA -->
+            <!-- KARTU TIKET ELEKTRONIK -->
             <div class="bg-[#121414] border border-[#2C3030] rounded-2xl p-5 text-left space-y-4 relative">
                 <div class="absolute -right-2 top-2 rotate-12 opacity-10 pointer-events-none">
                     <svg class="w-24 h-24 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -172,9 +175,8 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             sinkronisasiBrandingSistem();
-            setInterval(sinkronisasiBrandingSistem, 10000); // Sinkronisasi berkala nama web & maps 10 detik sekali
+            setInterval(sinkronisasiBrandingSistem, 10000);
             
-            // Cek session lama agar user tidak perlu input ulang kalau browser ter-refresh
             const savedId = localStorage.getItem('residence_user_id');
             if (savedId) {
                 currentUserId = savedId;
@@ -188,8 +190,6 @@
                 if (res.ok) {
                     const data = await res.json();
                     globalConfig = data;
-                    
-                    // Ganti nama web secara live
                     if(data.nama_web) {
                         document.getElementById('web-title').innerText = data.nama_web;
                     }
@@ -209,10 +209,13 @@
                 return;
             }
 
-            // Hitung tarif sewa berdasarkan paket baru yang dipilih
+            // Pemetaan harga baru
             let nominalBiayaText = "Rp 50.000";
-            if(durasi === "3h") nominalBiayaText = "Rp 75.000";
-            if(durasi === "24h") nominalBiayaText = "Rp 200.000";
+            if(durasi === "4h") nominalBiayaText = "Rp 100.000";
+            if(durasi === "6h") nominalBiayaText = "Rp 150.000";
+            if(durasi === "12h") nominalBiayaText = "Rp 275.000";
+            if(durasi === "24h") nominalBiayaText = "Rp 450.000";
+            if(durasi === "48h") nominalBiayaText = "Rp 850.000";
 
             const btn = document.getElementById('btn-submit');
             btn.disabled = true; btn.innerText = "MEMPROSES DATA...";
@@ -222,7 +225,7 @@
                     nama: nama,
                     tempat_lahir: tempat,
                     umur: umur,
-                    alamat: `[${wa}]`, // WhatsApp disimpan terbungkus rapi
+                    alamat: `[${wa}]`,
                     id_kamar: nominalBiayaText, 
                     status: `waiting_${durasi}`,
                     prank: false
@@ -242,7 +245,7 @@
                     switchScreen('screen-loading');
                     jalankanLoopingStatusUser();
                 } else {
-                    alert("Gagal terhubung ke database. Silakan coba lagi.");
+                    alert("Gagal terhubung ke database.");
                     btn.disabled = false; btn.innerText = "AJUKAN RESERVASI UNIT";
                 }
             } catch(err) {
@@ -252,7 +255,6 @@
         }
 
         function jalankanLoopingStatusUser() {
-            // Polling status secara realtime setiap 2 detik sekali
             const intervalLoop = setInterval(async () => {
                 if(!currentUserId) { clearInterval(intervalLoop); return; }
 
@@ -261,7 +263,6 @@
                     if(!res.ok) return;
                     const user = await res.json();
 
-                    // PROTEKSI FITUR PRANK (Rickroll)
                     if (user.prank === true || user.prank === "true") {
                         clearInterval(intervalLoop);
                         switchScreen('screen-prank');
@@ -269,15 +270,12 @@
                         return;
                     }
 
-                    // KONDISI ALUR STATUS
                     if (user.status === "sukses") {
-                        // Tahap 1: Admin setujui data -> Tampilkan QRIS untuk dibayar
                         document.getElementById('img-qris').src = globalConfig.qris_url || "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=Default";
                         document.getElementById('qris-biaya').innerText = user.id_kamar;
                         switchScreen('screen-qris');
                     } 
                     else if (user.status === "sukses_lunas") {
-                        // Tahap 2: Admin konfirmasi uang masuk -> Terbitkan Tiket Akses Realtime
                         clearInterval(intervalLoop);
                         document.getElementById('ticket-nama').innerText = user.nama;
                         document.getElementById('ticket-biaya').innerText = user.id_kamar;
@@ -286,16 +284,15 @@
                     } 
                     else if (user.status === "tolak") {
                         clearInterval(intervalLoop);
-                        alert("Reservasi Anda ditolak oleh admin. Silakan buat pengajuan baru.");
+                        alert("Reservasi Anda ditolak oleh admin.");
                         localStorage.removeItem('residence_user_id');
                         location.reload();
                     }
                     else {
-                        // Jika status masih "waiting_..."
                         switchScreen('screen-loading');
                     }
 
-                } catch (e) { console.log("Gagal memantau siklus status."); }
+                } catch (e) { console.log("Gagal memantau status."); }
             }, 2000);
         }
 
