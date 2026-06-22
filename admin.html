@@ -3,296 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-RESIDENCE - Luxury Control Panel</title>
+    <title>E-RESIDENCE ADMIN PANEL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=600;700&family=Inter:wght@400;500;600;700&display=swap');
-        body {
-            background-color: #121414;
-            color: #E2E8F0;
-            font-family: 'Inter', sans-serif;
-        }
-        .font-luxury { font-family: 'Cinzel', serif; }
-        .luxury-card { background: #1A1D1D; border: 1px solid #2C3030; }
-        .gold-border { border-color: #AA7C11; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #121414; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #AA7C11; border-radius: 4px; }
+        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8 flex flex-col gap-6 max-w-6xl mx-auto">
+<body class="p-4 md:p-8">
 
-    <!-- HEADER PANEL -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 luxury-card p-6 rounded-2xl shadow-xl">
-        <div>
-            <h1 class="font-luxury text-lg font-bold tracking-widest text-[#D4AF37]">E-RESIDENCE CENTRAL CONTROLLER</h1>
-            <p class="text-xs text-gray-400 mt-0.5">Kelola Branding Properti, Integrasi Google Maps, & Validasi Tiket Hunian</p>
-        </div>
-        <div class="flex flex-wrap items-center gap-4">
-            <div class="bg-[#121414] border border-[#2C3030] px-4 py-2 rounded-xl text-right">
-                <p class="text-[10px] uppercase text-gray-400 tracking-wider">Total Omzet Ter-Approve</p>
-                <p class="text-base font-bold text-[#D4AF37]" id="total-revenue">Rp 0</p>
+    <div class="max-w-6xl mx-auto">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-yellow-500">ADMIN DASHBOARD</h1>
+            <button onclick="location.reload()" class="bg-slate-700 px-4 py-2 rounded-lg text-sm hover:bg-slate-600">Refresh Data</button>
+        </header>
+
+        <!-- PENGATURAN BRANDING -->
+        <div class="bg-slate-800 p-6 rounded-xl mb-8 border border-slate-700">
+            <h2 class="text-lg font-semibold mb-4">Pengaturan Global</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="set-nama" placeholder="Nama Web" class="bg-slate-900 p-2 rounded border border-slate-700">
+                <input type="text" id="set-maps" placeholder="URL Google Maps" class="bg-slate-900 p-2 rounded border border-slate-700">
+                <input type="text" id="set-qris" placeholder="URL Gambar QRIS" class="bg-slate-900 p-2 rounded border border-slate-700">
             </div>
-            <button onclick="fetchSemuaData()" class="px-4 py-2.5 bg-[#2C3030] hover:bg-[#3A4040] text-gray-300 font-bold text-xs rounded-xl border border-[#444A4A] transition flex items-center gap-2">
-                <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.253 8H18"></path></svg>
-                REFRESH DATA
-            </button>
-        </div>
-    </header>
-
-    <!-- CONTENT MATRIX -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- KOLOM KIRI: SETTING BRAND, MAPS, & QRIS -->
-        <div class="lg:col-span-1 luxury-card p-6 rounded-2xl shadow-xl flex flex-col gap-5">
-            <div>
-                <h2 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Konfigurasi Sistem Web</h2>
-                <p class="text-[11px] text-gray-400">Pengaturan identitas, navigasi, dan pembayaran</p>
-            </div>
-            
-            <div class="space-y-4">
-                <!-- Judul Web -->
-                <div>
-                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Nama / Judul Web Properti</label>
-                    <input type="text" id="admin-nama-web" placeholder="Contoh: E-RESIDENCE VVIP" class="w-full bg-[#121414] border border-[#2C3030] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
-                </div>
-
-                <!-- Google Maps -->
-                <div>
-                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Link Google Maps Lokasi</label>
-                    <input type="text" id="admin-maps-url" placeholder="https://maps.google.com/..." class="w-full bg-[#121414] border border-[#2C3030] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
-                </div>
-
-                <!-- QRIS Link -->
-                <div>
-                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Direct Link Gambar QRIS (ImgBB)</label>
-                    <input type="text" id="admin-qris-url" placeholder="https://i.ibb.co/.../qris.jpg" class="w-full bg-[#121414] border border-[#2C3030] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
-                </div>
-
-                <button onclick="simpanPengaturanSistem()" id="btn-save-settings" class="w-full py-3 bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-[#121414] font-bold text-xs tracking-wider rounded-xl transition uppercase shadow-md">
-                    SIMPAN & SEBARKAN PERUBAHAN
-                </button>
-            </div>
-
-            <div class="border-t border-[#2C3030] pt-4">
-                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-2 text-center">Preview QRIS Aktif Saat Ini:</label>
-                <div class="bg-white p-3 rounded-xl max-w-[150px] mx-auto aspect-square flex items-center justify-center overflow-hidden border border-gray-300">
-                    <img id="admin-preview-qris" src="" alt="Tidak Ada Gambar" class="w-full h-full object-contain">
-                </div>
-            </div>
+            <button onclick="simpanSetting()" class="mt-4 bg-yellow-600 text-white px-6 py-2 rounded font-bold hover:bg-yellow-500">SIMPAN KONFIGURASI</button>
         </div>
 
-        <!-- KOLOM KANAN: ANTRIAN RESERVASI -->
-        <div class="lg:col-span-2 luxury-card p-6 rounded-2xl shadow-xl flex flex-col gap-4">
-            <div class="flex items-center justify-between border-b border-[#2C3030] pb-3">
-                <div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Manajemen Antrean Penghuni</h2>
-                    <p class="text-[11px] text-gray-400">Kendalikan alur verifikasi data dan status invoice pembayaran</p>
-                </div>
-                <span id="data-counter" class="px-3 py-0.5 bg-[#121414] text-[#D4AF37] border border-[#2C3030] rounded-full text-[10px] font-mono font-bold">0 Users</span>
-            </div>
-
-            <!-- TABLE -->
-            <div class="overflow-x-auto custom-scrollbar border border-[#2C3030] rounded-xl bg-[#121414]/30">
-                <table class="w-full text-left text-xs min-w-[700px]">
-                    <thead class="bg-[#121414] text-gray-400 uppercase text-[9px] tracking-wider border-b border-[#2C3030]">
-                        <tr>
-                            <th class="p-3">Identitas Calon Penghuni</th>
-                            <th class="p-3">Nomor WhatsApp</th>
-                            <th class="p-3">Rencana Sewa</th>
-                            <th class="p-3">Nominal Biaya</th>
-                            <th class="p-3 text-center">Status Alur</th>
-                            <th class="p-3 text-center">Aksi Operasional</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-table-body" class="divide-y divide-[#2C3030]/40">
-                        <tr>
-                            <td colspan="6" class="p-6 text-center text-gray-500">Menghubungkan ke database properti...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <!-- TABEL DATA USER -->
+        <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-900 uppercase">
+                    <tr>
+                        <th class="p-4">Nama</th>
+                        <th class="p-4">Durasi/Biaya</th>
+                        <th class="p-4">Status</th>
+                        <th class="p-4">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table">
+                    <!-- Data masuk otomatis via JS -->
+                </tbody>
+            </table>
         </div>
-
     </div>
 
     <script>
         const API_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
-        
-        window.addEventListener('DOMContentLoaded', () => {
-            loadPengaturanAwal();
-            fetchSemuaData();
-            setInterval(fetchSemuaData, 4000); // Polling realtime 4 detik sekali
-        });
 
-        async function loadPengaturanAwal() {
-            try {
-                const res = await fetch(`${API_BASE}/setting/1`);
-                if (res.ok) {
-                    const data = await res.json();
-                    document.getElementById('admin-nama-web').value = data.nama_web || "";
-                    document.getElementById('admin-maps-url').value = data.maps_url || "";
-                    document.getElementById('admin-qris-url').value = data.qris_url || "";
-                    document.getElementById('admin-preview-qris').src = data.qris_url || "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=Default";
-                }
-            } catch (e) { console.log("Gagal memuat setting awal."); }
-        }
+        async function loadData() {
+            const res = await fetch(`${API_BASE}/users`);
+            const users = await res.json();
+            const tbody = document.getElementById('user-table');
+            tbody.innerHTML = '';
 
-        async function simpanPengaturanSistem() {
-            const btn = document.getElementById('btn-save-settings');
-            const namaWeb = document.getElementById('admin-nama-web').value.trim();
-            const mapsUrl = document.getElementById('admin-maps-url').value.trim();
-            const qrisUrl = document.getElementById('admin-qris-url').value.trim();
-
-            btn.disabled = true; btn.innerText = "MENYIMPAN DATA...";
-            try {
-                const res = await fetch(`${API_BASE}/setting/1`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ nama_web: namaWeb, maps_url: mapsUrl, qris_url: qrisUrl })
-                });
-                if (res.ok) {
-                    alert("Seluruh Konfigurasi Sistem Berhasil Diperbarui!");
-                    document.getElementById('admin-preview-qris').src = qrisUrl;
-                }
-            } catch (err) { alert("Masalah koneksi database."); }
-            finally { btn.disabled = false; btn.innerText = "SIMPAN & SEBARKAN PERUBAHAN"; }
-        }
-
-        async function fetchSemuaData() {
-            try {
-                const res = await fetch(`${API_BASE}/users`);
-                if (!res.ok) return;
-                const users = await res.json();
-                
-                users.sort((a, b) => parseInt(b.id) - parseInt(a.id));
-                document.getElementById('data-counter').innerText = `${users.length} Registrasi`;
-                
-                // Hitung total pendapatan dari user berstatus lunas
-                let totalCuan = 0;
-                users.forEach(u => {
-                    if (u.status === "sukses_lunas" && u.id_kamar) {
-                        const cleanNum = parseInt(u.id_kamar.replace(/[^0-9]/g, ''));
-                        if (!isNaN(cleanNum)) totalCuan += cleanNum;
-                    }
-                });
-                document.getElementById('total-revenue').innerText = `Rp ${totalCuan.toLocaleString('id-ID')}`;
-                
-                renderTabelKendali(users);
-            } catch (e) { console.log("Gagal menyinkronkan data."); }
-        }
-
-        function renderTabelKendali(users) {
-            const tbody = document.getElementById('admin-table-body');
-            if (users.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500">Belum ada aktivitas reservasi dari user.</td></tr>`;
-                return;
-            }
-
-            let rowsHtml = "";
-            users.forEach(user => {
-                let waClean = user.alamat ? user.alamat.replace(/[\[\]]/g, '') : '-';
-
-                let durasiDisplay = "2 Jam";
-                if (user.status && user.status.includes("waiting_")) {
-                    durasiDisplay = user.status.replace("waiting_", "").replace("h", " Jam");
-                } else if (user.status === "sukses" || user.status === "sukses_lunas" || user.status === "tolak") {
-                    durasiDisplay = "Terproses";
-                }
-
-                // Bagian Badge Status Alur
-                let badgeStyle = "bg-[#2A2015] text-[#D4AF37] border-[#5A4515]";
-                let readableStatus = "MENUNGGU QR";
-                
-                if (user.status === "sukses") {
-                    badgeStyle = "bg-blue-950/80 text-blue-400 border-blue-900";
-                    readableStatus = "QR DI-SCAN USER";
-                } else if (user.status === "sukses_lunas") {
-                    badgeStyle = "bg-emerald-950 text-emerald-400 border-emerald-900";
-                    readableStatus = "TIKET AKTIF (LUNAS)";
-                } else if (user.status === "tolak") {
-                    badgeStyle = "bg-red-950 text-red-400 border-red-900";
-                    readableStatus = "DITOLAK";
-                }
-
-                const isPrankActive = user.prank === true || user.prank === "true";
-                let prankStyle = isPrankActive ? "bg-purple-600 text-white" : "bg-purple-950/40 text-purple-400 border border-purple-900/60 hover:bg-purple-900/40";
-
-                rowsHtml += `
-                    <tr class="hover:bg-[#1A1D1D]/60 transition">
-                        <td class="p-3 font-semibold text-white">
-                            ${user.nama}<br>
-                            <span class="text-[10px] text-gray-500 font-normal">${user.tempat_lahir}, ${user.umur} Thn</span>
-                        </td>
-                        <td class="p-3 font-mono text-gray-300">
-                            <a href="https://wa.me/${waClean.replace(/^0/, '62')}" target="_blank" class="hover:underline inline-flex items-center gap-1 text-gray-400 hover:text-white">
-                                ${waClean}
-                                <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                            </a>
-                        </td>
-                        <td class="p-3 font-medium text-gray-300">${durasiDisplay}</td>
-                        <td class="p-3 font-bold text-[#D4AF37]">${user.id_kamar || 'Rp 0'}</td>
-                        <td class="p-3 text-center">
-                            <span class="px-2.5 py-0.5 border rounded-full text-[9px] font-bold tracking-wide ${badgeStyle}">
-                                ${readableStatus}
-                            </span>
-                        </td>
-                        <td class="p-3">
-                            <div class="flex items-center justify-center gap-1">
-                                <!-- Tahap 1: Kirim QRIS -->
-                                <button onclick="eksekusiStatus('${user.id}', 'sukses', ${user.prank})" class="px-2 py-1 bg-amber-700 hover:bg-amber-600 text-white text-[10px] font-bold rounded transition">
-                                    ACC QR
-                                </button>
-                                <!-- Tahap 2: Konfirmasi Uang Masuk / Terbitkan Tiket -->
-                                <button onclick="eksekusiStatus('${user.id}', 'sukses_lunas', ${user.prank})" class="px-2 py-1 bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] font-bold rounded transition">
-                                    LUNAS (TIKET)
-                                </button>
-                                <button onclick="eksekusiStatus('${user.id}', 'tolak', ${user.prank})" class="px-1.5 py-1 bg-red-800 hover:bg-red-700 text-white text-[10px] font-bold rounded transition">
-                                    TOLAK
-                                </button>
-                                <button onclick="triggerPrank('${user.id}', ${isPrankActive}, '${user.status}')" class="px-1.5 py-1 text-[10px] font-bold rounded transition ${prankStyle}">
-                                    ${isPrankActive ? '💥 RICK' : 'PRANK'}
-                                </button>
-                                <button onclick="hapusUser('${user.id}')" class="px-1.5 py-1 bg-black text-gray-600 hover:text-red-400 text-[10px] rounded transition">
-                                    ✕
-                                </button>
-                            </div>
+            users.reverse().forEach(u => {
+                tbody.innerHTML += `
+                    <tr class="border-t border-slate-700">
+                        <td class="p-4">${u.nama}<br><span class="text-xs text-slate-400">Umur: ${u.umur} | WA: ${u.alamat}</span></td>
+                        <td class="p-4 font-mono">${u.id_kamar}</td>
+                        <td class="p-4"><span class="px-2 py-1 rounded text-[10px] uppercase font-bold bg-slate-700">${u.status}</span></td>
+                        <td class="p-4 space-x-2">
+                            <button onclick="updateStatus('${u.id}', 'sukses')" class="bg-blue-600 px-3 py-1 rounded text-xs">ACC</button>
+                            <button onclick="updateStatus('${u.id}', 'sukses_lunas')" class="bg-emerald-600 px-3 py-1 rounded text-xs">LUNAS</button>
+                            <button onclick="updateStatus('${u.id}', 'tolak')" class="bg-red-600 px-3 py-1 rounded text-xs">TOLAK</button>
+                            <button onclick="updateStatus('${u.id}', 'prank')" class="bg-purple-600 px-3 py-1 rounded text-xs">PRANK</button>
                         </td>
                     </tr>
                 `;
             });
-            tbody.innerHTML = rowsHtml;
         }
 
-        async function eksekusiStatus(id, target, prankValue) {
-            try {
-                await fetch(`${API_BASE}/users/${id}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ status: target, prank: prankValue })
-                });
-                fetchSemuaData();
-            } catch(e) { alert("Gagal memperbarui status."); }
+        async function updateStatus(id, status) {
+            const payload = (status === 'prank') ? { prank: true } : { status: status };
+            await fetch(`${API_BASE}/users/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            loadData();
         }
 
-        async function triggerPrank(id, currentPrank, currentStatus) {
-            try {
-                await fetch(`${API_BASE}/users/${id}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ status: currentStatus, prank: !currentPrank })
-                });
-                fetchSemuaData();
-            } catch(e) { alert("Gagal mengeksekusi prank."); }
+        async function simpanSetting() {
+            const data = {
+                nama_web: document.getElementById('set-nama').value,
+                maps_url: document.getElementById('set-maps').value,
+                qris_url: document.getElementById('set-qris').value
+            };
+            await fetch(`${API_BASE}/setting/1`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+            alert("Konfigurasi disimpan!");
         }
 
-        async function hapusUser(id) {
-            if(!confirm("Hapus log reservasi ini dari database?")) return;
-            try {
-                await fetch(`${API_BASE}/users/${id}`, { method: "DELETE" });
-                fetchSemuaData();
-            } catch(e) { alert("Gagal menghapus."); }
-        }
+        loadData();
+        setInterval(loadData, 5000);
     </script>
 </body>
 </html>
