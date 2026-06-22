@@ -3,101 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-RESIDENCE ADMIN PANEL</title>
+    <title>E-RESIDENCE - Executive Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=600;700&family=Plus+Jakarta+Sans:wght=400;500;600;700&display=swap');
+        body {
+            background-color: #0B0C0E;
+            color: #F1F5F9;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .font-luxury { font-family: 'Cinzel', serif; }
+        .luxury-card { 
+            background: rgba(22, 26, 30, 0.8); 
+            border: 1px solid rgba(212, 175, 55, 0.15); 
+            backdrop-filter: blur(16px);
+        }
+        .gold-gradient { background: linear-gradient(135deg, #AA7C11 0%, #D4AF37 100%); }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="min-h-screen p-4 md:p-8">
 
-    <div class="max-w-6xl mx-auto">
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold text-yellow-500">ADMIN DASHBOARD</h1>
-            <button onclick="location.reload()" class="bg-slate-700 px-4 py-2 rounded-lg text-sm hover:bg-slate-600">Refresh Data</button>
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- HEADER -->
+        <header class="flex flex-col md:flex-row justify-between items-center bg-[#161A1E] border border-white/5 rounded-3xl p-6 gap-4">
+            <div>
+                <h1 class="font-luxury text-xl md:text-2xl font-bold tracking-widest text-[#D4AF37]">CONTROL PANEL</h1>
+                <p class="text-xs text-gray-400 mt-1">Sistem Manajemen Pengguna & Pengaturan E-Residence</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-xl text-emerald-400">
+                <span class="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
+                Sistem Terhubung Real-Time
+            </div>
         </header>
 
-        <!-- PENGATURAN BRANDING -->
-        <div class="bg-slate-800 p-6 rounded-xl mb-8 border border-slate-700">
-            <h2 class="text-lg font-semibold mb-4">Pengaturan Global</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input type="text" id="set-nama" placeholder="Nama Web" class="bg-slate-900 p-2 rounded border border-slate-700">
-                <input type="text" id="set-maps" placeholder="URL Google Maps" class="bg-slate-900 p-2 rounded border border-slate-700">
-                <input type="text" id="set-qris" placeholder="URL Gambar QRIS" class="bg-slate-900 p-2 rounded border border-slate-700">
-            </div>
-            <button onclick="simpanSetting()" class="mt-4 bg-yellow-600 text-white px-6 py-2 rounded font-bold hover:bg-yellow-500">SIMPAN KONFIGURASI</button>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- PANEL KIRI: SYSTEM SETTINGS -->
+            <section class="luxury-card rounded-3xl p-6 space-y-5 h-fit">
+                <h2 class="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Konfigurasi Sistem
+                </h2>
 
-        <!-- TABEL DATA USER -->
-        <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-slate-900 uppercase">
-                    <tr>
-                        <th class="p-4">Nama</th>
-                        <th class="p-4">Durasi/Biaya</th>
-                        <th class="p-4">Status</th>
-                        <th class="p-4">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="user-table">
-                    <!-- Data masuk otomatis via JS -->
-                </tbody>
-            </table>
+                <!-- Nama Web -->
+                <div class="space-y-1.5">
+                    <label class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Nama Website Branding</label>
+                    <input type="text" id="cfg-nama-web" class="w-full bg-[#0D0F11] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                </div>
+
+                <!-- Google Maps -->
+                <div class="space-y-1.5">
+                    <label class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Link Google Maps Lokasi</label>
+                    <input type="text" id="cfg-maps" class="w-full bg-[#0D0F11] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="https://maps.google.com/...">
+                </div>
+
+                <!-- Input Langsung Link URL QRIS -->
+                <div class="space-y-1.5">
+                    <label class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Link URL Gambar QRIS</label>
+                    <input type="text" id="cfg-qris-url" class="w-full bg-[#0D0F11] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="https://i.ibb.co/example/qris.jpg">
+                    <p class="text-[10px] text-gray-500 italic">Tempel langsung tautan gambar QRIS Anda di sini.</p>
+                </div>
+
+                <button onclick="simpanKonfigurasiSistem()" id="btn-save-config" class="w-full py-3 gold-gradient text-[#121414] font-bold text-xs tracking-wider rounded-xl uppercase transition hover:opacity-90">
+                    SIMPAN SEMUA PERUBAHAN
+                </button>
+            </section>
+
+            <!-- PANEL KANAN: LIVE USER MONITOR -->
+            <section class="luxury-card rounded-3xl p-6 lg:col-span-2 space-y-4">
+                <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                    <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 3a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        Antrean Pemohon Hunian
+                    </h2>
+                    <button onclick="muatDaftarUser()" class="text-[11px] px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition text-gray-300">
+                        Refresh Data
+                    </button>
+                </div>
+
+                <!-- CONTAINER LIST KARTU USER -->
+                <div id="user-list-container" class="space-y-4 max-h-[600px] overflow-y-auto pr-1">
+                    <p class="text-xs text-gray-500 italic text-center py-8">Sedang sinkronisasi data pendaftar...</p>
+                </div>
+            </section>
+
         </div>
     </div>
 
-    <script>
+    <!-- JAVASCRIPT LOGIC -->
+    <script {timestamp="2026-06-23"}>
         const API_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
+        let configId = "1"; 
 
-        async function loadData() {
-            const res = await fetch(`${API_BASE}/users`);
-            const users = await res.json();
-            const tbody = document.getElementById('user-table');
-            tbody.innerHTML = '';
+        window.addEventListener('DOMContentLoaded', () => {
+            ambilKonfigurasiSistem();
+            muatDaftarUser();
+            
+            // Loop data pendaftar otomatis setiap 4 detik
+            setInterval(muatDaftarUser, 4000);
+        });
 
-            users.reverse().forEach(u => {
-                tbody.innerHTML += `
-                    <tr class="border-t border-slate-700">
-                        <td class="p-4">${u.nama}<br><span class="text-xs text-slate-400">Umur: ${u.umur} | WA: ${u.alamat}</span></td>
-                        <td class="p-4 font-mono">${u.id_kamar}</td>
-                        <td class="p-4"><span class="px-2 py-1 rounded text-[10px] uppercase font-bold bg-slate-700">${u.status}</span></td>
-                        <td class="p-4 space-x-2">
-                            <button onclick="updateStatus('${u.id}', 'sukses')" class="bg-blue-600 px-3 py-1 rounded text-xs">ACC</button>
-                            <button onclick="updateStatus('${u.id}', 'sukses_lunas')" class="bg-emerald-600 px-3 py-1 rounded text-xs">LUNAS</button>
-                            <button onclick="updateStatus('${u.id}', 'tolak')" class="bg-red-600 px-3 py-1 rounded text-xs">TOLAK</button>
-                            <button onclick="updateStatus('${u.id}', 'prank')" class="bg-purple-600 px-3 py-1 rounded text-xs">PRANK</button>
-                        </td>
-                    </tr>
-                `;
-            });
+        // 1. MANAJEMEN PENGATURAN (SINKRONISASI GLOBAL)
+        async function ambilKonfigurasiSistem() {
+            try {
+                const res = await fetch(`${API_BASE}/setting/${configId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('cfg-nama-web').value = data.nama_web || "";
+                    document.getElementById('cfg-maps').value = data.maps_url || "";
+                    document.getElementById('cfg-qris-url').value = data.qris_url || "";
+                }
+            } catch (e) { console.log("Gagal memuat setting sistem."); }
         }
 
-        async function updateStatus(id, status) {
-            const payload = (status === 'prank') ? { prank: true } : { status: status };
-            await fetch(`${API_BASE}/users/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-            loadData();
+        async function simpanKonfigurasiSistem() {
+            const namaWeb = document.getElementById('cfg-nama-web').value.trim();
+            const mapsUrl = document.getElementById('cfg-maps').value.trim();
+            const qrisUrl = document.getElementById('cfg-qris-url').value.trim();
+            
+            const btn = document.getElementById('btn-save-config');
+            btn.disabled = true; btn.innerText = "MENYIMPAN...";
+
+            try {
+                const payload = { nama_web: namaWeb, maps_url: mapsUrl, qris_url: qrisUrl };
+                const res = await fetch(`${API_BASE}/setting/${configId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if(res.ok) {
+                    alert("Konfigurasi sistem berhasil diperbarui secara global!");
+                } else {
+                    alert("Gagal memperbarui konfigurasi di server.");
+                }
+            } catch (e) {
+                alert("Gangguan koneksi internet.");
+            } finally {
+                btn.disabled = false; btn.innerText = "SIMPAN SEMUA PERUBAHAN";
+            }
         }
 
-        async function simpanSetting() {
-            const data = {
-                nama_web: document.getElementById('set-nama').value,
-                maps_url: document.getElementById('set-maps').value,
-                qris_url: document.getElementById('set-qris').value
-            };
-            await fetch(`${API_BASE}/setting/1`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
-            alert("Konfigurasi disimpan!");
+        // 2. MANAJEMEN TINDAKAN USER (ACC, LUNAS, TOLAK, BANNED/PRANK)
+        async function muatDaftarUser() {
+            try {
+                const res = await fetch(`${API_BASE}/users`);
+                if(!res.ok) return;
+                const users = await res.json();
+                
+                // Urutkan berdasarkan ID terbesar (Terbaru di atas)
+                users.sort((a, b) => b.id - a.id);
+
+                const container = document.getElementById('user-list-container');
+                if(users.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-gray-500 italic text-center py-8">Belum ada data pengajuan reservasi.</p>`;
+                    return;
+                }
+
+                let htmlContent = "";
+                users.forEach(user => {
+                    let statusBadge = "";
+                    if(user.status.includes('waiting')) statusBadge = `<span class="px-2 py-0.5 text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-md font-bold uppercase">MENUNGGU ACC</span>`;
+                    else if(user.status === 'sukses') statusBadge = `<span class="px-2 py-0.5 text-[9px] bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-md font-bold uppercase">DI-ACC (BLM BAYAR)</span>`;
+                    else if(user.status === 'sukses_lunas') statusBadge = `<span class="px-2 py-0.5 text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-md font-bold uppercase">LUNAS / SELESAI</span>`;
+                    else if(user.status === 'tolak') statusBadge = `<span class="px-2 py-0.5 text-[9px] bg-red-500/10 text-red-400 border border-red-500/20 rounded-md font-bold uppercase">DITOLAK</span>`;
+                    
+                    if(user.prank === true || user.prank === "true") {
+                        statusBadge = `<span class="px-2 py-0.5 text-[9px] bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-md font-bold uppercase">🚨 BANNED / PRANK</span>`;
+                    }
+
+                    htmlContent += `
+                    <div class="bg-[#121417] border border-white/5 rounded-2xl p-4 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center hover:border-white/10 transition">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="text-xs font-bold text-white tracking-wide">${user.nama} <span class="text-gray-500 font-normal">(${user.umur} Thn - ${user.tempat_lahir})</span></h3>
+                                ${statusBadge}
+                            </div>
+                            <p class="text-[11px] text-[#D4AF37] font-medium">Paket Tagihan: ${user.id_kamar || 'Belum dipilih'}</p>
+                            <p class="text-[11px] text-gray-400">WhatsApp Kontak: <span class="font-mono text-gray-300">${user.alamat || 'N/A'}</span></p>
+                        </div>
+                        
+                        <div class="flex items-center gap-1.5 w-full md:w-auto flex-wrap">
+                            <button onclick="ubahStatusUser('${user.id}', 'sukses')" class="text-[10px] font-bold px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition uppercase">
+                                ACC Unit
+                            </button>
+                            
+                            <button onclick="ubahStatusUser('${user.id}', 'sukses_lunas')" class="text-[10px] font-bold px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition uppercase">
+                                Konfirmasi Lunas
+                            </button>
+
+                            <button onclick="ubahStatusUser('${user.id}', 'tolak')" class="text-[10px] font-semibold px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition uppercase">
+                                Tolak
+                            </button>
+
+                            <button onclick="eksekusiBannedPrank('${user.id}')" class="text-[10px] font-bold px-2.5 py-1.5 bg-purple-900/40 hover:bg-purple-900 border border-purple-800 text-purple-300 rounded-lg transition uppercase">
+                                Ban Prank
+                            </button>
+
+                            <button onclick="hapusUserData('${user.id}')" class="text-[10px] p-1.5 bg-red-950/40 hover:bg-red-900/60 border border-red-900/50 text-red-400 rounded-lg transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    `;
+                });
+
+                container.innerHTML = htmlContent;
+            } catch (err) { console.log("Gagal menyegarkan antrean."); }
         }
 
-        loadData();
-        setInterval(loadData, 5000);
+        async function ubahStatusUser(id, statusBaru) {
+            try {
+                const res = await fetch(`${API_BASE}/users/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ status: statusBaru })
+                });
+                if(res.ok) { muatDaftarUser(); }
+            } catch(e) { alert("Gagal memperbarui status user."); }
+        }
+
+        async function eksekusiBannedPrank(id) {
+            if(!confirm("Apakah Anda yakin ingin memberikan penalti Ban-Prank (Rickroll) pada pengguna ini?")) return;
+            try {
+                const res = await fetch(`${API_BASE}/users/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prank: true })
+                });
+                if(res.ok) { muatDaftarUser(); }
+            } catch(e) { alert("Gagal melakukan ban."); }
+        }
+
+        async function hapusUserData(id) {
+            if(!confirm("Hapus data permanen dari log antrean database?")) return;
+            try {
+                const res = await fetch(`${API_BASE}/users/${id}`, { method: "DELETE" });
+                if(res.ok) { muatDaftarUser(); }
+            } catch(e) { alert("Gagal menghapus."); }
+        }
     </script>
 </body>
 </html>
