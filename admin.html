@@ -3,41 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-RESIDENCE Super Controller Panel</title>
+    <title>E-RESIDENCE - Luxury Control Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700&family=Syncopate:wght=700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=600;700&family=Inter:wght@400;500;600;700&display=swap');
         body {
-            background-color: #040807;
-            color: #f3f4f6;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #121414;
+            color: #E2E8F0;
+            font-family: 'Inter', sans-serif;
         }
-        .font-logo { font-family: 'Syncopate', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #09120f; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #059669; border-radius: 4px; }
+        .font-luxury { font-family: 'Cinzel', serif; }
+        .luxury-card { background: #1A1D1D; border: 1px solid #2C3030; }
+        .gold-border { border-color: #AA7C11; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #121414; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #AA7C11; border-radius: 4px; }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col gap-6 max-w-6xl mx-auto">
 
     <!-- HEADER PANEL -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#09120f] p-6 rounded-2xl border border-emerald-950 shadow-2xl">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 luxury-card p-6 rounded-2xl shadow-xl">
         <div>
-            <h1 class="font-logo text-base md:text-lg font-bold tracking-widest text-emerald-400">E-RESIDENCE CONTROLLER v2</h1>
-            <p class="text-xs text-gray-400 mt-0.5">Pantau Nominal Keuangan, Durasi Sewa Jam, & Validasi QRIS Aktif</p>
+            <h1 class="font-luxury text-lg font-bold tracking-widest text-[#D4AF37]">E-RESIDENCE CENTRAL CONTROLLER</h1>
+            <p class="text-xs text-gray-400 mt-0.5">Kelola Branding Properti, Integrasi Google Maps, & Validasi Tiket Hunian</p>
         </div>
         <div class="flex flex-wrap items-center gap-4">
-            <!-- TOTAL CASH CALCULATOR -->
-            <div class="bg-black/40 border border-emerald-900/40 px-4 py-2 rounded-xl text-right">
-                <p class="text-[10px] uppercase text-gray-400 tracking-wider">Total Pendapatan Ter-Approve</p>
-                <p class="text-base font-bold text-emerald-400" id="total-revenue">Rp 0</p>
+            <div class="bg-[#121414] border border-[#2C3030] px-4 py-2 rounded-xl text-right">
+                <p class="text-[10px] uppercase text-gray-400 tracking-wider">Total Omzet Ter-Approve</p>
+                <p class="text-base font-bold text-[#D4AF37]" id="total-revenue">Rp 0</p>
             </div>
-            <button onclick="fetchSemuaData()" class="px-4 py-2.5 bg-emerald-900/40 hover:bg-emerald-800 text-emerald-400 font-bold text-xs rounded-xl border border-emerald-700/40 transition flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.253 8H18"></path></svg>
-                REFRESH SYSTEM
+            <button onclick="fetchSemuaData()" class="px-4 py-2.5 bg-[#2C3030] hover:bg-[#3A4040] text-gray-300 font-bold text-xs rounded-xl border border-[#444A4A] transition flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.253 8H18"></path></svg>
+                REFRESH DATA
             </button>
         </div>
     </header>
@@ -45,57 +43,71 @@
     <!-- CONTENT MATRIX -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- KOLOM KIRI: SET QRIS & MONITOR -->
-        <div class="lg:col-span-1 bg-[#09120f] p-6 rounded-2xl border border-emerald-950 shadow-xl flex flex-col gap-5">
+        <!-- KOLOM KIRI: SETTING BRAND, MAPS, & QRIS -->
+        <div class="lg:col-span-1 luxury-card p-6 rounded-2xl shadow-xl flex flex-col gap-5">
             <div>
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Pusat Link QRIS Pembayaran</h2>
-                <p class="text-[11px] text-gray-400">Masukkan link gambar barcode QRIS yang akan di-scan oleh user</p>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Konfigurasi Sistem Web</h2>
+                <p class="text-[11px] text-gray-400">Pengaturan identitas, navigasi, dan pembayaran</p>
             </div>
             
-            <div class="space-y-3">
+            <div class="space-y-4">
+                <!-- Judul Web -->
                 <div>
-                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Direct Link Foto QRIS</label>
-                    <input type="text" id="admin-qris-url" placeholder="https://image-hosting.com/qris.jpg" class="w-full bg-black/50 border border-emerald-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Nama / Judul Web Properti</label>
+                    <input type="text" id="admin-nama-web" placeholder="Contoh: E-RESIDENCE VVIP" class="w-full bg-[#121414] border border-[#2C3030] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
                 </div>
-                <button onclick="simpanQRISBaru()" id="btn-save-qris" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wider rounded-xl transition uppercase shadow">
-                    SIMPAN & SEBARKAN QRIS
+
+                <!-- Google Maps -->
+                <div>
+                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Link Google Maps Lokasi</label>
+                    <input type="text" id="admin-maps-url" placeholder="https://maps.google.com/..." class="w-full bg-[#121414] border border-[#2C3030] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                </div>
+
+                <!-- QRIS Link -->
+                <div>
+                    <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-1">Direct Link Gambar QRIS (ImgBB)</label>
+                    <input type="text" id="admin-qris-url" placeholder="https://i.ibb.co/.../qris.jpg" class="w-full bg-[#121414] border border-[#2C3030] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                </div>
+
+                <button onclick="simpanPengaturanSistem()" id="btn-save-settings" class="w-full py-3 bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-[#121414] font-bold text-xs tracking-wider rounded-xl transition uppercase shadow-md">
+                    SIMPAN & SEBARKAN PERUBAHAN
                 </button>
             </div>
 
-            <div class="border-t border-emerald-950/60 pt-4">
-                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-2">QRIS Menghadap User Saat Ini:</label>
-                <div class="bg-white p-3 rounded-xl max-w-[170px] mx-auto aspect-square flex items-center justify-center overflow-hidden border border-emerald-900/20">
-                    <img id="admin-preview-qris" src="" alt="Tidak Ada QR" class="w-full h-full object-contain">
+            <div class="border-t border-[#2C3030] pt-4">
+                <label class="block text-[10px] text-gray-400 uppercase tracking-wider mb-2 text-center">Preview QRIS Aktif Saat Ini:</label>
+                <div class="bg-white p-3 rounded-xl max-w-[150px] mx-auto aspect-square flex items-center justify-center overflow-hidden border border-gray-300">
+                    <img id="admin-preview-qris" src="" alt="Tidak Ada Gambar" class="w-full h-full object-contain">
                 </div>
             </div>
         </div>
 
-        <!-- KOLOM KANAN: TABEL KENDALI ANTRIAN REALTIME -->
-        <div class="lg:col-span-2 bg-[#09120f] p-6 rounded-2xl border border-emerald-950 shadow-xl flex flex-col gap-4">
-            <div class="flex items-center justify-between border-b border-emerald-950/60 pb-3">
+        <!-- KOLOM KANAN: ANTRIAN RESERVASI -->
+        <div class="lg:col-span-2 luxury-card p-6 rounded-2xl shadow-xl flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-[#2C3030] pb-3">
                 <div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Manajemen Antrean & Pembayaran Sewa</h2>
-                    <p class="text-[11px] text-gray-400">Klik ACC QR untuk memunculkan barcode di halaman tunggu penyewa</p>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Manajemen Antrean Penghuni</h2>
+                    <p class="text-[11px] text-gray-400">Kendalikan alur verifikasi data dan status invoice pembayaran</p>
                 </div>
-                <span id="data-counter" class="px-3 py-0.5 bg-black text-emerald-400 border border-emerald-900 rounded-full text-[10px] font-mono font-bold">0 Users</span>
+                <span id="data-counter" class="px-3 py-0.5 bg-[#121414] text-[#D4AF37] border border-[#2C3030] rounded-full text-[10px] font-mono font-bold">0 Users</span>
             </div>
 
             <!-- TABLE -->
-            <div class="overflow-x-auto custom-scrollbar border border-emerald-950 rounded-xl bg-black/20">
-                <table class="w-full text-left text-xs min-w-[650px]">
-                    <thead class="bg-black/50 text-emerald-400 uppercase text-[9px] tracking-wider border-b border-emerald-950">
+            <div class="overflow-x-auto custom-scrollbar border border-[#2C3030] rounded-xl bg-[#121414]/30">
+                <table class="w-full text-left text-xs min-w-[700px]">
+                    <thead class="bg-[#121414] text-gray-400 uppercase text-[9px] tracking-wider border-b border-[#2C3030]">
                         <tr>
-                            <th class="p-3">Calon Penghuni</th>
-                            <th class="p-3">WhatsApp</th>
-                            <th class="p-3">Durasi Jam</th>
-                            <th class="p-3">Nominal Uang</th>
-                            <th class="p-3 text-center">Status</th>
-                            <th class="p-3 text-center">Aksi Operasi</th>
+                            <th class="p-3">Identitas Calon Penghuni</th>
+                            <th class="p-3">Nomor WhatsApp</th>
+                            <th class="p-3">Rencana Sewa</th>
+                            <th class="p-3">Nominal Biaya</th>
+                            <th class="p-3 text-center">Status Alur</th>
+                            <th class="p-3 text-center">Aksi Operasional</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-table-body" class="divide-y divide-emerald-950/30">
+                    <tbody id="admin-table-body" class="divide-y divide-[#2C3030]/40">
                         <tr>
-                            <td colspan="6" class="p-6 text-center text-gray-600">Sinkronisasi data database server...</td>
+                            <td colspan="6" class="p-6 text-center text-gray-500">Menghubungkan ke database properti...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -108,38 +120,43 @@
         const API_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
         
         window.addEventListener('DOMContentLoaded', () => {
-            loadQRISSetting();
+            loadPengaturanAwal();
             fetchSemuaData();
-            setInterval(fetchSemuaData, 4000); // Polling otomatis setiap 4 detik
+            setInterval(fetchSemuaData, 4000); // Polling realtime 4 detik sekali
         });
 
-        async function loadQRISSetting() {
+        async function loadPengaturanAwal() {
             try {
                 const res = await fetch(`${API_BASE}/setting/1`);
                 if (res.ok) {
                     const data = await res.json();
+                    document.getElementById('admin-nama-web').value = data.nama_web || "";
+                    document.getElementById('admin-maps-url').value = data.maps_url || "";
                     document.getElementById('admin-qris-url').value = data.qris_url || "";
                     document.getElementById('admin-preview-qris').src = data.qris_url || "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=Default";
                 }
-            } catch (e) { console.log(e); }
+            } catch (e) { console.log("Gagal memuat setting awal."); }
         }
 
-        async function simpanQRISBaru() {
-            const btn = document.getElementById('btn-save-qris');
-            const url = document.getElementById('admin-qris-url').value.trim();
-            btn.disabled = true; btn.innerText = "MENYIMPAN...";
+        async function simpanPengaturanSistem() {
+            const btn = document.getElementById('btn-save-settings');
+            const namaWeb = document.getElementById('admin-nama-web').value.trim();
+            const mapsUrl = document.getElementById('admin-maps-url').value.trim();
+            const qrisUrl = document.getElementById('admin-qris-url').value.trim();
+
+            btn.disabled = true; btn.innerText = "MENYIMPAN DATA...";
             try {
                 const res = await fetch(`${API_BASE}/setting/1`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ qris_url: url })
+                    body: JSON.stringify({ nama_web: namaWeb, maps_url: mapsUrl, qris_url: qrisUrl })
                 });
                 if (res.ok) {
-                    alert("QRIS Berhasil Diperbarui!");
-                    document.getElementById('admin-preview-qris').src = url;
+                    alert("Seluruh Konfigurasi Sistem Berhasil Diperbarui!");
+                    document.getElementById('admin-preview-qris').src = qrisUrl;
                 }
-            } catch (err) { alert("Masalah jaringan"); }
-            finally { btn.disabled = false; btn.innerText = "SIMPAN & SEBARKAN QRIS"; }
+            } catch (err) { alert("Masalah koneksi database."); }
+            finally { btn.disabled = false; btn.innerText = "SIMPAN & SEBARKAN PERUBAHAN"; }
         }
 
         async function fetchSemuaData() {
@@ -149,12 +166,12 @@
                 const users = await res.json();
                 
                 users.sort((a, b) => parseInt(b.id) - parseInt(a.id));
-                document.getElementById('data-counter').innerText = `${users.length} Users`;
+                document.getElementById('data-counter').innerText = `${users.length} Registrasi`;
                 
-                // Hitung akumulasi uang masuk ter-approve
+                // Hitung total pendapatan dari user berstatus lunas
                 let totalCuan = 0;
                 users.forEach(u => {
-                    if (u.status === "sukses" && u.id_kamar) {
+                    if (u.status === "sukses_lunas" && u.id_kamar) {
                         const cleanNum = parseInt(u.id_kamar.replace(/[^0-9]/g, ''));
                         if (!isNaN(cleanNum)) totalCuan += cleanNum;
                     }
@@ -168,50 +185,53 @@
         function renderTabelKendali(users) {
             const tbody = document.getElementById('admin-table-body');
             if (users.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500">Belum ada transaksi masuk dari user.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500">Belum ada aktivitas reservasi dari user.</td></tr>`;
                 return;
             }
 
             let rowsHtml = "";
             users.forEach(user => {
-                let waClean = "-";
-                if (user.alamat) { waClean = user.alamat.replace(/[\[\]]/g, ''); }
+                let waClean = user.alamat ? user.alamat.replace(/[\[\]]/g, '') : '-';
 
                 let durasiDisplay = "2 Jam";
                 if (user.status && user.status.includes("waiting_")) {
                     durasiDisplay = user.status.replace("waiting_", "").replace("h", " Jam");
-                } else if (user.status === "sukses" || user.status === "tolak") {
+                } else if (user.status === "sukses" || user.status === "sukses_lunas" || user.status === "tolak") {
                     durasiDisplay = "Terproses";
                 }
 
-                let badgeStyle = "bg-amber-950/60 text-amber-400 border-amber-800/50";
+                // Bagian Badge Status Alur
+                let badgeStyle = "bg-[#2A2015] text-[#D4AF37] border-[#5A4515]";
                 let readableStatus = "MENUNGGU QR";
                 
                 if (user.status === "sukses") {
-                    badgeStyle = "bg-emerald-950 text-emerald-400 border-emerald-800";
-                    readableStatus = "APPROVED (SCAN)";
+                    badgeStyle = "bg-blue-950/80 text-blue-400 border-blue-900";
+                    readableStatus = "QR DI-SCAN USER";
+                } else if (user.status === "sukses_lunas") {
+                    badgeStyle = "bg-emerald-950 text-emerald-400 border-emerald-900";
+                    readableStatus = "TIKET AKTIF (LUNAS)";
                 } else if (user.status === "tolak") {
                     badgeStyle = "bg-red-950 text-red-400 border-red-900";
                     readableStatus = "DITOLAK";
                 }
 
                 const isPrankActive = user.prank === true || user.prank === "true";
-                let prankStyle = isPrankActive ? "bg-purple-600 text-white border-purple-400" : "bg-purple-950 text-purple-400 border-purple-900/60 hover:bg-purple-900";
+                let prankStyle = isPrankActive ? "bg-purple-600 text-white" : "bg-purple-950/40 text-purple-400 border border-purple-900/60 hover:bg-purple-900/40";
 
                 rowsHtml += `
-                    <tr class="hover:bg-emerald-950/10 transition">
+                    <tr class="hover:bg-[#1A1D1D]/60 transition">
                         <td class="p-3 font-semibold text-white">
                             ${user.nama}<br>
                             <span class="text-[10px] text-gray-500 font-normal">${user.tempat_lahir}, ${user.umur} Thn</span>
                         </td>
-                        <td class="p-3 font-mono text-emerald-400">
-                            <a href="https://wa.me/${waClean.replace(/^0/, '62')}" target="_blank" class="hover:underline inline-flex items-center gap-1">
+                        <td class="p-3 font-mono text-gray-300">
+                            <a href="https://wa.me/${waClean.replace(/^0/, '62')}" target="_blank" class="hover:underline inline-flex items-center gap-1 text-gray-400 hover:text-white">
                                 ${waClean}
                                 <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             </a>
                         </td>
                         <td class="p-3 font-medium text-gray-300">${durasiDisplay}</td>
-                        <td class="p-3 font-bold text-emerald-400">${user.id_kamar || 'Rp 0'}</td>
+                        <td class="p-3 font-bold text-[#D4AF37]">${user.id_kamar || 'Rp 0'}</td>
                         <td class="p-3 text-center">
                             <span class="px-2.5 py-0.5 border rounded-full text-[9px] font-bold tracking-wide ${badgeStyle}">
                                 ${readableStatus}
@@ -219,16 +239,21 @@
                         </td>
                         <td class="p-3">
                             <div class="flex items-center justify-center gap-1">
-                                <button onclick="eksekusiStatus('${user.id}', 'sukses', ${user.prank})" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold rounded-md transition shadow">
+                                <!-- Tahap 1: Kirim QRIS -->
+                                <button onclick="eksekusiStatus('${user.id}', 'sukses', ${user.prank})" class="px-2 py-1 bg-amber-700 hover:bg-amber-600 text-white text-[10px] font-bold rounded transition">
                                     ACC QR
                                 </button>
-                                <button onclick="eksekusiStatus('${user.id}', 'tolak', ${user.prank})" class="px-2 py-1 bg-red-600 hover:bg-red-500 text-white text-[10px] font-bold rounded-md transition shadow">
+                                <!-- Tahap 2: Konfirmasi Uang Masuk / Terbitkan Tiket -->
+                                <button onclick="eksekusiStatus('${user.id}', 'sukses_lunas', ${user.prank})" class="px-2 py-1 bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] font-bold rounded transition">
+                                    LUNAS (TIKET)
+                                </button>
+                                <button onclick="eksekusiStatus('${user.id}', 'tolak', ${user.prank})" class="px-1.5 py-1 bg-red-800 hover:bg-red-700 text-white text-[10px] font-bold rounded transition">
                                     TOLAK
                                 </button>
-                                <button onclick="triggerPrank('${user.id}', ${isPrankActive}, '${user.status}')" class="px-1.5 py-1 border text-[10px] font-bold rounded-md transition ${prankStyle}">
+                                <button onclick="triggerPrank('${user.id}', ${isPrankActive}, '${user.status}')" class="px-1.5 py-1 text-[10px] font-bold rounded transition ${prankStyle}">
                                     ${isPrankActive ? '💥 RICK' : 'PRANK'}
                                 </button>
-                                <button onclick="hapusUser('${user.id}')" class="px-1.5 py-1 bg-black border border-gray-800 text-gray-500 hover:text-red-400 text-[10px] rounded-md transition">
+                                <button onclick="hapusUser('${user.id}')" class="px-1.5 py-1 bg-black text-gray-600 hover:text-red-400 text-[10px] rounded transition">
                                     ✕
                                 </button>
                             </div>
@@ -258,15 +283,15 @@
                     body: JSON.stringify({ status: currentStatus, prank: !currentPrank })
                 });
                 fetchSemuaData();
-            } catch(e) { alert("Gagal"); }
+            } catch(e) { alert("Gagal mengeksekusi prank."); }
         }
 
         async function hapusUser(id) {
-            if(!confirm("Hapus data reservasi ini?")) return;
+            if(!confirm("Hapus log reservasi ini dari database?")) return;
             try {
                 await fetch(`${API_BASE}/users/${id}`, { method: "DELETE" });
                 fetchSemuaData();
-            } catch(e) { alert("Gagal menghapus"); }
+            } catch(e) { alert("Gagal menghapus."); }
         }
     </script>
 </body>
