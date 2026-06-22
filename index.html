@@ -18,7 +18,6 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
-        /* Custom Loader */
         .loader-ring {
             border: 3px solid rgba(16, 185, 129, 0.1);
             border-top: 3px solid #10b981;
@@ -28,7 +27,7 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
-            0 { transform: rotate(0deg); }
+            0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
     </style>
@@ -37,10 +36,8 @@
 
     <div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-emerald-950/20 rounded-full filter blur-[120px] pointer-events-none"></div>
 
-    <!-- MAIN CONTAINER -->
     <main class="w-full max-w-lg glassmorphism rounded-3xl border border-emerald-950/80 p-6 md:p-8 shadow-2xl relative z-10">
         
-        <!-- HEADER ZONE -->
         <header class="text-center mb-8">
             <div class="inline-flex p-3 bg-emerald-950/40 rounded-2xl border border-emerald-900/30 mb-3">
                 <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +48,6 @@
             <p class="text-xs text-emerald-400/80 uppercase tracking-widest font-medium mt-1">Premium Co-Living Space</p>
         </header>
 
-        <!-- STEP 1: FORMULIR RESERVASI -->
         <div id="section-form" class="space-y-5">
             <div class="border-b border-emerald-950/60 pb-3">
                 <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-400">Formulir Sewa Kamar Suite</h2>
@@ -60,18 +56,18 @@
 
             <div>
                 <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
-                <input type="text" id="in-nama" placeholder="Contoh: Budi Santoso" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500">
+                <input type="text" id="in-nama" placeholder="Contoh: Budi Santoso" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500">
             </div>
 
             <div>
                 <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">Nomor WhatsApp Aktif</label>
-                <input type="tel" id="in-wa" placeholder="Contoh: 081234567890" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500">
+                <input type="tel" id="in-wa" placeholder="Contoh: 081234567890" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">Tempat Lahir</label>
-                    <input type="text" id="in-tempat-lahir" placeholder="Kota" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="in-tempat-lahir" placeholder="Kota" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">Tanggal Lahir</label>
@@ -87,39 +83,37 @@
                 <div>
                     <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">Durasi Menginap (Jam)</label>
                     <select id="in-durasi" onchange="kalkulasiTarifSewa()" class="w-full bg-black/40 border border-emerald-950 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 cursor-pointer">
-                        <option value="2">2 Jam (Short Time)</option>
-                        <option value="4">4 Jam (Transit)</option>
-                        <option value="6">6 Jam (Half Day)</option>
-                        <option value="12">12 Jam (Day Pass)</option>
-                        <option value="24" selected>24 Jam (Full Day)</option>
+                        <option value="2" selected>2 Jam (Rp 50.000)</option>
+                        <option value="4">4 Jam (Rp 100.000)</option>
+                        <option value="6">6 Jam (Rp 150.000)</option>
+                        <option value="12">12 Jam (Rp 300.000)</option>
+                        <option value="24">24 Jam (Rp 600.000)</option>
                     </select>
                 </div>
             </div>
 
-            <!-- INVOICE -->
             <div class="bg-black/40 border border-emerald-950 rounded-2xl p-4 flex items-center justify-between">
                 <div>
-                    <p class="text-[10px] uppercase text-gray-400 tracking-wider">Tarif Sewa Kamar (Rp50.000 / Jam)</p>
-                    <p class="text-xs text-white font-medium mt-0.5 font-sans">Fasilitas Lengkap</p>
+                    <p class="text-[10px] uppercase text-gray-400 tracking-wider">Tarif Sewa Kamar (Rp 50.000 / 2 Jam)</p>
+                    <p class="text-xs text-white font-medium mt-0.5">Sudah termasuk AC, Wifi, & Smart TV</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-xs text-gray-400 line-through" id="text-diskon">Rp0</p>
-                    <p class="text-lg font-bold text-emerald-400 tracking-tight" id="text-harga-total">Rp0</p>
+                    <p class="text-lg font-bold text-emerald-400 tracking-tight" id="text-harga-total">Rp 50.000</p>
                 </div>
             </div>
 
-            <button onclick="ajukanBookingKamar()" id="btn-submit" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-widest rounded-xl uppercase transition-all shadow-lg shadow-emerald-900/20">
+            <button onclick="ajukanBookingKamar()" id="btn-submit" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-widest rounded-xl transition-all uppercase shadow-lg shadow-emerald-900/20">
                 AJUKAN RESERVASI SEKARANG
             </button>
         </div>
 
-        <!-- STEP 2: LIVE WAITING ROOM -->
         <div id="section-waiting" class="hidden flex flex-col items-center text-center space-y-6 py-6">
             <div class="loader-ring"></div>
+            
             <div class="space-y-2">
-                <h3 class="text-base font-bold text-white tracking-wide">Menghubungkan ke Admin Residence...</h3>
+                <h3 class="text-base font-bold text-white tracking-wide">Menghubungkan ke Admin...</h3>
                 <p class="text-xs text-gray-400 max-w-sm mx-auto leading-relaxed">
-                    Mohon tunggu sebentar. Admin sedang memeriksa ketersediaan kamar dan menyiapkan kode QRIS pembayaran unik Anda.
+                    Mohon tunggu sejenak selagi admin membuatkan QR pembayaran resmi untuk transaksi Anda.
                 </p>
             </div>
 
@@ -130,15 +124,15 @@
             </div>
 
             <div class="text-[11px] text-emerald-500/80 animate-pulse bg-emerald-950/30 px-3 py-1.5 rounded-full border border-emerald-900/30">
-                Halaman ini otomatis memuat QR setelah disetujui admin
+                Halaman otomatis menampilkan QR setelah disetujui admin
             </div>
         </div>
 
-        <!-- STEP 3: QRIS GATEWAY -->
         <div id="section-payment" class="hidden flex flex-col items-center text-center space-y-5">
             <div class="bg-emerald-500 text-black font-bold text-[10px] tracking-widest px-3 py-1 rounded-full uppercase">
                 QRIS Pembayaran Siap
             </div>
+            
             <div class="space-y-1">
                 <h3 class="text-base font-bold text-white">Selesaikan Pembayaran Anda</h3>
                 <p class="text-xs text-gray-400">Silakan scan kode QRIS resmi E-RESIDENCE di bawah ini</p>
@@ -161,7 +155,9 @@
         let currentUserId = null;
         let pollingInterval = null;
 
-        window.addEventListener('DOMContentLoaded', () => { kalkulasiTarifSewa(); });
+        window.addEventListener('DOMContentLoaded', () => {
+            kalkulasiTarifSewa();
+        });
 
         function hitungUmurOtomatis() {
             const birthDateInput = document.getElementById('in-tgl-lahir').value;
@@ -170,27 +166,18 @@
             const today = new Date();
             let age = today.getFullYear() - birthDate.getFullYear();
             const monthDiff = today.getMonth() - birthDate.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) { age--; }
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
             document.getElementById('in-umur').value = age > 0 ? age : 0;
         }
 
         function kalkulasiTarifSewa() {
             const jam = parseInt(document.getElementById('in-durasi').value);
-            const tarifPerJam = 50000;
-            const hargaNormal = jam * tarifPerJam;
-            let diskon = 0;
-            if (jam === 4) diskon = 20000;
-            else if (jam === 6) diskon = 50000;
-            else if (jam === 12) diskon = 150000;
-            else if (jam === 24) diskon = 400000;
-
-            const hargaTotal = hargaNormal - diskon;
-            if (diskon > 0) {
-                document.getElementById('text-diskon').innerText = `Rp ${hargaNormal.toLocaleString('id-ID')}`;
-                document.getElementById('text-diskon').classList.remove('hidden');
-            } else {
-                document.getElementById('text-diskon').classList.add('hidden');
-            }
+            // Tarif flat: Rp25.000 per jam (Sehingga 2 jam = Rp50.000, 4 jam = Rp100.000, dst)
+            const tarifPerJam = 25000;
+            const hargaTotal = jam * tarifPerJam;
+            
             document.getElementById('text-harga-total').innerText = `Rp ${hargaTotal.toLocaleString('id-ID')}`;
         }
 
@@ -203,39 +190,55 @@
             const jam = document.getElementById('in-durasi').value;
 
             if (!nama || !wa || !tempatLahir || !tglLahir) {
-                alert("Mohon lengkapi semua kolom formulir reservasi.");
+                alert("Mohon lengkapi semua kolom formulir.");
                 return;
             }
 
             const payloadWA = `[${wa}]`;
             const totalBayarText = document.getElementById('text-harga-total').innerText;
+
             const btn = document.getElementById('btn-submit');
-            btn.disabled = true; btn.innerText = "MEMPROSES DATA...";
+            btn.disabled = true;
+            btn.innerText = "MEMPROSES DATA...";
 
             try {
                 const response = await fetch(`${API_BASE}/users`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        nama: nama, alamat: payloadWA, tempat_lahir: tempatLahir,
-                        tanggal_lahir: tglLahir, umur: umur, id_kamar: totalBayarText,
-                        status: `waiting_${jam}h`, prank: false
+                        nama: nama,
+                        alamat: payloadWA,
+                        tempat_lahir: tempatLahir,
+                        tanggal_lahir: tglLahir,
+                        umur: umur,
+                        id_kamar: totalBayarText, // Transit nominal dana ke admin
+                        status: `waiting_${jam}h`, // Simpan durasi sewa jam
+                        prank: false
                     })
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     currentUserId = data.id;
+                    
                     document.getElementById('section-form').classList.add('hidden');
                     document.getElementById('section-waiting').classList.remove('hidden');
+                    
                     document.getElementById('wait-nama').innerText = nama;
                     document.getElementById('wait-durasi').innerText = `${jam} Jam`;
                     document.getElementById('wait-nominal').innerText = totalBayarText;
+
                     startRealtimePolling();
                 } else {
-                    alert("Gagal memproses."); btn.disabled = false;
+                    alert("Gagal memproses booking.");
+                    btn.disabled = false;
+                    btn.innerText = "AJUKAN RESERVASI SEKARANG";
                 }
-            } catch (err) { alert("Kesalahan jaringan."); btn.disabled = false; }
+            } catch (err) {
+                alert("Kesalahan jaringan.");
+                btn.disabled = false;
+                btn.innerText = "AJUKAN RESERVASI SEKARANG";
+            }
         }
 
         function startRealtimePolling() {
@@ -260,7 +263,9 @@
                         alert("Maaf, permohonan reservasi Anda ditolak oleh admin.");
                         location.reload();
                     }
-                } catch (e) { console.log("Mencoba sinkronisasi ulang..."); }
+                } catch (e) {
+                    console.log("Sinkronisasi ulang...");
+                }
             }, 3000);
         }
 
@@ -269,12 +274,16 @@
                 const setRes = await fetch(`${API_BASE}/setting/1`);
                 if (setRes.ok) {
                     const settingData = await setRes.json();
+                    
                     document.getElementById('section-waiting').classList.add('hidden');
                     document.getElementById('section-payment').classList.remove('hidden');
+                    
                     document.getElementById('img-qris').src = settingData.qris_url || "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=E-Residence-Default";
                     document.getElementById('pay-id').innerText = `ERES-${userId}-REG`;
                 }
-            } catch (err) { console.error("Gagal memuat visual QRIS."); }
+            } catch (err) {
+                console.error("Gagal memuat visual QRIS.");
+            }
         }
     </script>
 </body>
