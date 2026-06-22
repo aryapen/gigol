@@ -6,7 +6,7 @@
     <title>VIP GATEPASS ENTRY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #06020f; color: #fff; font-family: 'Tomorrow', sans-serif; overflow: hidden; }
+        body { background-color: #06020f; color: #fff; font-family: 'Tomorrow', sans-serif; overflow-y: auto; }
         @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght=700&family=Tomorrow:wght=500;700&display=swap');
         
         .font-logo { font-family: 'Syncopate', sans-serif; }
@@ -104,7 +104,6 @@
         let currentUserId = null;
         let monitorInterval = null;
 
-        // FUNGSI PROSES REGISTRASI TARGET
         async function handleRegistrasi(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-reg');
@@ -118,7 +117,7 @@
             btn.disabled = true;
             btn.innerText = "TRANSMITTING DATA...";
 
-            // Membungkus format username sosmed dengan kurung siku [] agar terbaca pink mencolok di admin panel
+            // Format tanda kurung siku [] agar terbaca pink mencolok di admin panel
             const formattedAlamat = `[${sosmed}]`;
 
             const payload = {
@@ -142,46 +141,38 @@
                     const data = await response.json();
                     currentUserId = data.id;
                     
-                    // Alihkan ke layar pending konfirmasi admin
                     document.getElementById('screen-register').classList.add('hidden');
                     document.getElementById('screen-pending').classList.remove('hidden');
 
-                    // Jalankan background loop checker setiap 3 detik
                     monitorInterval = setInterval(checkStatusDariAdmin, 3000);
                 } else {
-                    alert("Gagal terhubung ke gerbang pertahanan database.");
+                    alert("Gagal terhubung ke database.");
                     btn.disabled = false;
                     btn.innerText = "DAPATKAN AKSES GERBANG";
                 }
             } catch (err) {
-                alert("Koneksi gagal. Coba lagi.");
+                alert("Koneksi gagal.");
                 btn.disabled = false;
                 btn.innerText = "DAPATKAN AKSES GERBANG";
             }
         }
 
-        // ENGINE LOOP CHECKER STATUS REALTIME
         async function checkStatusDariAdmin() {
             if(!currentUserId) return;
 
             try {
-                // 1. Ambil data status target saat ini
                 const userResp = await fetch(`${MOCKAPI_BASE}/users/${currentUserId}`);
                 if (!userResp.ok) {
-                    // Jika data dihapus oleh admin dari panel, tendang target keluar
                     clearInterval(monitorInterval);
                     window.location.reload();
                     return;
                 }
                 const userData = await userResp.json();
 
-                // 2. Jalankan logika interceptor status interaksi prank
                 kendaliFiturPrank(userData.prank);
 
-                // 3. Evaluasi pemindahan layar utama berdasarkan keputusan admin
                 if (userData.status === "sukses" || userData.status === "approved") {
                     clearInterval(monitorInterval);
-                    // Ambil config gambar QRIS terbaru dari setting admin sebelum mekar layar sukses
                     await sinkronisasiGambarQRIS();
                     
                     document.getElementById('screen-pending').classList.add('hidden');
@@ -195,7 +186,6 @@
             } catch (e) { console.log("Mencari dlink data..."); }
         }
 
-        // MENGAMBIL CONFIG QRIS TERBARU YANG DIUNGGAH ADMIN
         async function sinkronisasiGambarQRIS() {
             try {
                 const settingResp = await fetch(`${MOCKAPI_BASE}/setting/1`);
@@ -208,19 +198,16 @@
             } catch(err) { console.log("Gagal memuat aset gambar QRIS utama."); }
         }
 
-        // LOGIKA KENDALI INTERCEPTOR PRANK (AUDIO LOOP EFFECT)
         let soundIsPlaying = false;
         function kendaliFiturPrank(prankStatus) {
             const audio = document.getElementById('prank-audio-player');
-            // Menangani status string maupun boolean dari server database
             const isActive = (prankStatus === true || prankStatus === "true");
 
             if (isActive && !soundIsPlaying) {
                 audio.play().then(() => {
                     soundIsPlaying = true;
-                    // Beri efek goyang layar (glitch visual ekstrim) sewaktu kena jebakan prank
                     document.body.classList.add('animate-bounce', 'bg-red-950');
-                }).catch(e => console.log("Izin audio browser diblokir, menunggu interaksi layar..."));
+                }).catch(e => console.log("Izin audio browser diblokir..."));
             } else if (!isActive && soundIsPlaying) {
                 audio.pause();
                 audio.currentTime = 0;
