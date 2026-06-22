@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gigol - Executive Club</title>
+    
+    <script src="https://recallscarce.com/03/bb/ec/03bbec523dda08fd3f190c1773d348e4.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #030008; color: #fff; overflow-y: auto; position: relative; }
@@ -33,7 +36,7 @@
         .btn-magenta:disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4 md:p-8 selection:bg-magenta selection:text-white">
+<body class="flex flex-col items-center justify-center min-h-screen p-4 md:p-8 selection:bg-magenta selection:text-white space-y-6">
 
     <div class="club-laser"></div>
 
@@ -96,6 +99,14 @@
                     </button>
                 </div>
             </div>
+
+            <div class="pt-4 border-t border-purple-950/40">
+                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-bold mb-2 text-center">SPONSORED PARTNER</p>
+                <div class="rounded-xl overflow-hidden bg-black/20 p-1 border border-purple-900/20">
+                    <script async="async" data-cfasync="false" src="https://recallscarce.com/ec075d98e4fc625c650d285616cbecdc/invoke.js"></script>
+                    <div id="container-ec075d98e4fc625c650d285616cbecdc"></div>
+                </div>
+            </div>
         </div>
 
         <div id="halaman-qris" class="hidden space-y-5 font-club-body">
@@ -146,6 +157,19 @@
 
     </div>
 
+    <div class="z-10 w-full max-w-[468px] overflow-hidden flex justify-center bg-black/40 p-1 border border-purple-950/50 rounded-xl shadow-lg">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '58d95ca21f65a9e0e77987ce3c0aa9f2',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="https://recallscarce.com/58d95ca21f65a9e0e77987ce3c0aa9f2/invoke.js"></script>
+    </div>
+
     <div id="modal-oauth" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
         <div class="w-full max-w-sm bg-[#1c1c1e] border border-gray-800 rounded-2xl overflow-hidden shadow-2xl font-club-body text-left">
             <div id="modal-header-bg" class="px-5 py-4 text-white font-bold text-sm flex items-center justify-between">
@@ -171,7 +195,6 @@
     </div>
 
     <script>
-        // Menggunakan ID baru dari URL MockAPI milikmu
         const MOCKAPI_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
         const USERS_URL = `${MOCKAPI_BASE}/users`;
         const SETTING_URL = `${MOCKAPI_BASE}/setting/1`;
@@ -180,9 +203,6 @@
         let trackerInterval = null;
         let platformAktif = "";
 
-        // ==========================================
-        // FITUR ANTI LOGOUT SAAT REFRESH
-        // ==========================================
         window.addEventListener('DOMContentLoaded', async () => {
             const savedUserId = localStorage.getItem('gigol_user_id');
             if (savedUserId) {
@@ -304,73 +324,67 @@
                 if(response.ok) {
                     const hasil = await response.json();
                     currentUserId = hasil.id;
-                    
-                    // Simpan ID baru di localStorage pendaftar
                     localStorage.setItem('gigol_user_id', hasil.id);
-                    
-                    document.getElementById('display-nama-sukses').innerText = hasil.nama;
-                    
+
                     await fetchDynamicQRIS();
-                    switchHalaman('halaman-qris');
+                    document.getElementById('halaman-form').classList.add('hidden');
+                    document.getElementById('halaman-qris').classList.remove('hidden');
                     startStatusTracker();
                 } else {
-                    alert("Koneksi database ditolak.");
-                    resetButtonNormal();
+                    alert("Gagal terhubung dengan server keamanan. Silakan coba lagi.");
+                    resetSubmitButton();
                 }
-            } catch (error) {
-                alert("Gagal terhubung ke database.");
-                resetButtonNormal();
+            } catch(e) {
+                console.error(e);
+                alert("Terjadi kesalahan jaringan.");
+                resetSubmitButton();
             }
         }
 
-        function resetButtonNormal() {
+        function resetSubmitButton() {
             const btnSubmit = document.getElementById('btn-submit');
-            btnSubmit.disabled = false;
-            btnSubmit.style.background = "";
-            btnSubmit.innerText = "DAFTAR SEKARANG";
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "DAFTAR SEKARANG";
+            }
         }
 
         function startStatusTracker() {
-            if(trackerInterval) clearInterval(trackerInterval);
+            if (trackerInterval) clearInterval(trackerInterval);
             trackerInterval = setInterval(async () => {
-                if(!currentUserId) return;
+                if (!currentUserId) return;
                 try {
-                    const response = await fetch(`${USERS_URL}/${currentUserId}`);
-                    if(response.ok) {
-                        const user = await response.json();
-                        
-                        document.getElementById('display-nama-sukses').innerText = user.nama;
-
-                        if(user.prank === true) {
-                            switchHalaman('halaman-prank');
-                            return; 
-                        }
-                        if(user.status === "banned") {
-                            switchHalaman('halaman-banned');
+                    const resp = await fetch(`${USERS_URL}/${currentUserId}`);
+                    if (resp.ok) {
+                        const user = await resp.json();
+                        if (user.prank === true || user.prank === "true") {
                             clearInterval(trackerInterval);
-                        } else if(user.status === "approved") {
-                            switchHalaman('halaman-sukses');
-                            clearInterval(trackerInterval);
-                        } else if(user.status === "pending" && user.prank === false) {
-                            switchHalaman('halaman-qris');
+                            localStorage.removeItem('gigol_user_id');
+                            tampilkanHalaman('halaman-prank');
+                            return;
                         }
-                    } else {
-                        // Jika ID dihapus oleh admin di dashboard MockAPI, bersihkan localStorage & kembalikan ke form
-                        localStorage.removeItem('gigol_user_id');
-                        switchHalaman('halaman-form');
-                        clearInterval(trackerInterval);
-                        resetButtonNormal();
+                        if (user.status === "sukses") {
+                            clearInterval(trackerInterval);
+                            document.getElementById('display-nama-sukses').innerText = user.nama;
+                            tampilkanHalaman('halaman-sukses');
+                        } else if (user.status === "banned" || user.status === "tolak") {
+                            clearInterval(trackerInterval);
+                            tampilkanHalaman('halaman-banned');
+                        }
                     }
-                } catch (e) { console.log("Sync..."); }
-            }, 3000); 
+                } catch (e) {
+                    console.log("Koneksi tracker terputus, mencoba kembali...", e);
+                }
+            }, 3000);
         }
 
-        function switchHalaman(idTarget) {
-            const listHalaman = ['halaman-form', 'halaman-qris', 'halaman-sukses', 'halaman-banned', 'halaman-prank'];
-            listHalaman.forEach(id => {
-                if(id === idTarget) document.getElementById(id).classList.remove('hidden');
-                else document.getElementById(id).classList.add('hidden');
+        function tampilkanHalaman(idHalamanAktif) {
+            const halaman = ['halaman-form', 'halaman-qris', 'halaman-sukses', 'halaman-banned', 'halaman-prank'];
+            halaman.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
             });
+            document.getElementById(idHalamanAktif).classList.remove('hidden');
         }
     </script>
 </body>
