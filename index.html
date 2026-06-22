@@ -155,7 +155,25 @@
         let currentUserId = null;
         let pollingInterval = null;
 
+        // Pemicu otomatis saat halaman di-load atau di-refresh (F5)
         window.addEventListener('DOMContentLoaded', () => {
+            // Paksa semua interface visual kembali ke form booking utama
+            document.getElementById('section-form').classList.remove('hidden');
+            document.getElementById('section-waiting').classList.add('hidden');
+            document.getElementById('section-payment').classList.add('hidden');
+            
+            // Kembalikan teks dan status tombol submit
+            const btn = document.getElementById('btn-submit');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = "AJUKAN RESERVASI SEKARANG";
+            }
+
+            // Hancurkan interval polling lama agar tidak bocor di memori
+            currentUserId = null;
+            if (pollingInterval) clearInterval(pollingInterval);
+
+            // Hitung kalkulasi awal berdasarkan opsi default
             kalkulasiTarifSewa();
         });
 
@@ -174,7 +192,7 @@
 
         function kalkulasiTarifSewa() {
             const jam = parseInt(document.getElementById('in-durasi').value);
-            // Tarif flat: Rp25.000 per jam (Sehingga 2 jam = Rp50.000, 4 jam = Rp100.000, dst)
+            // Tarif flat kelipatan Rp50.000 per 2 jam (Rp25.000 per jam secara linier)
             const tarifPerJam = 25000;
             const hargaTotal = jam * tarifPerJam;
             
@@ -211,8 +229,8 @@
                         tempat_lahir: tempatLahir,
                         tanggal_lahir: tglLahir,
                         umur: umur,
-                        id_kamar: totalBayarText, // Transit nominal dana ke admin
-                        status: `waiting_${jam}h`, // Simpan durasi sewa jam
+                        id_kamar: totalBayarText, 
+                        status: `waiting_${jam}h`, 
                         prank: false
                     })
                 });
