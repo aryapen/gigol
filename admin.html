@@ -22,6 +22,7 @@
 </head>
 <body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
 
+    <!-- PANEL LOGIN ADMIN -->
     <div id="panel-login-admin" class="w-full max-w-md card-glow rounded-3xl p-6 md:p-8 border-neon-cyan text-center z-10">
         <div class="mb-6">
             <h1 class="font-admin-logo text-xl font-bold tracking-widest text-cyan-400 drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]">HQ SECURITY GATE</h1>
@@ -37,6 +38,7 @@
         <p id="error-login" class="text-xs text-red-500 font-bold mt-3 hidden uppercase tracking-wider">⚠️ Password Salah / Akses Ditolak!</p>
     </div>
 
+    <!-- PANEL UTAMA CONTROL CENTER -->
     <div id="panel-utama-admin" class="hidden w-full max-w-6xl mx-auto space-y-8">
         
         <div class="flex flex-col md:flex-row justify-between items-center bg-black/40 border border-cyan-500/20 rounded-2xl p-6 gap-4">
@@ -55,6 +57,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
+            <!-- CONFIG GATEPASS QRIS -->
             <div class="lg:col-span-1 space-y-6">
                 <div class="card-glow rounded-3xl p-6 space-y-4">
                     <h2 class="text-sm font-bold text-purple-400 tracking-wider uppercase border-b border-purple-900/40 pb-2">📡 GATEPASS QRIS CONFIG</h2>
@@ -77,6 +80,7 @@
                 </div>
             </div>
 
+            <!-- LIVE USER TRAFFIC MONITOR -->
             <div class="lg:col-span-2 card-glow rounded-3xl p-6 space-y-4 flex flex-col min-h-[500px]">
                 <div class="flex justify-between items-center border-b border-purple-900/40 pb-2">
                     <h2 class="text-sm font-bold text-cyan-400 tracking-wider uppercase">👥 LIVE INBOUND TRAFFIC</h2>
@@ -109,13 +113,12 @@
         const MOCKAPI_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
         const USERS_URL = `${MOCKAPI_BASE}/users`;
         const SETTING_URL = `${MOCKAPI_BASE}/setting/1`;
-        const IMGBB_API_KEY = "69ba2bc5960ccdf3c3ec11977bc698eb"; 
+        
+        // Integrasi API Key FreeImage Baru
+        const FREEIMAGE_API_KEY = "6d207e02198a847aa98d0a2a901485a5"; 
 
         let pollingInterval = null;
 
-        // ==========================================
-        // SISTEM VALIDASI LOGIN SECURE PIN
-        // ==========================================
         window.addEventListener('DOMContentLoaded', () => {
             const statusLogin = sessionStorage.getItem('admin_logged_in');
             if (statusLogin === "true") {
@@ -128,7 +131,6 @@
             const inputPass = document.getElementById('input-pass-admin').value;
             const errorLabel = document.getElementById('error-login');
 
-            // Set kata sandi sesuai permintaanmu: minulminul
             if (inputPass === "minulminul") {
                 sessionStorage.setItem('admin_logged_in', "true");
                 errorLabel.classList.add('hidden');
@@ -140,12 +142,10 @@
         }
 
         function bukaAksesPanelUtama() {
-            // Ubah struktur layout agar konten utama mekar sempurna
             document.body.classList.remove('items-center', 'justify-center');
             document.getElementById('panel-login-admin').classList.add('hidden');
             document.getElementById('panel-utama-admin').classList.remove('hidden');
             
-            // Jalankan fungsi sinkronisasi database
             loadConfigQRIS();
             fetchLiveUsers();
             pollingInterval = setInterval(fetchLiveUsers, 3000);
@@ -154,12 +154,9 @@
         function logoutAdmin() {
             sessionStorage.removeItem('admin_logged_in');
             if(pollingInterval) clearInterval(pollingInterval);
-            location.reload(); // Refresh halaman untuk mengunci kembali dari awal
+            location.reload();
         }
 
-        // ==========================================
-        // LOGIKA CORE CONTROL CENTER (MOCKAPI)
-        // ==========================================
         async function loadConfigQRIS() {
             try {
                 const resp = await fetch(SETTING_URL);
@@ -170,6 +167,7 @@
             } catch (e) { console.log("Load QRIS gagal..."); }
         }
 
+        // FUNGSI UPLOAD DI-KONFIGURASI ULANG UNTUK LAYANAN FREEIMAGE API
         async function uploadQRISBaru(e) {
             e.preventDefault();
             const fileInput = document.getElementById('input-file-qris');
@@ -179,23 +177,28 @@
             if(!fileInput.files[0]) return;
 
             btn.disabled = true;
-            btn.innerText = "UPLOADING TO CLOUD...";
+            btn.innerText = "UPLOADING...";
             statusMsg.className = "text-[10px] text-center font-bold tracking-wide mt-2 text-yellow-400 block";
-            statusMsg.innerText = "⚡ STEP 1: TRANSMITTING TO IMGBB...";
+            statusMsg.innerText = "⚡ STEP 1: TRANSMITTING TO FREEIMAGE CLOUD...";
 
             const formData = new FormData();
             formData.append("image", fileInput.files[0]);
 
             try {
-                const imgbbResp = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                // Menembak endpoint API unggah resmi milik FreeImage
+                const fiResp = await fetch(`https://freeimage.host/api/1/upload?key=${FREEIMAGE_API_KEY}`, {
                     method: "POST",
                     body: formData
                 });
-                const imgbbResult = await imgbbResp.json();
-                if (!imgbbResult.success) throw new Error();
-                const directUrl = imgbbResult.data.url;
+                const fiResult = await fiResp.json();
+                
+                // Mengurai struktur respon JSON unik dari FreeImage (.image.url)
+                if (fiResult.status_code !== 200 || !fiResult.image || !fiResult.image.url) {
+                    throw new Error("FreeImage API rejection");
+                }
+                const directUrl = fiResult.image.url;
 
-                statusMsg.innerText = "⚡ STEP 2: OVERWRITING MOCKAPI...";
+                statusMsg.innerText = "⚡ STEP 2: SYNCHRONIZING MOCKAPI DATABASE...";
 
                 const mockResp = await fetch(SETTING_URL, {
                     method: "PUT",
@@ -213,11 +216,13 @@
 
                 document.getElementById('current-qris-preview').src = directUrl;
                 statusMsg.className = "text-[10px] text-center font-bold tracking-wide mt-2 text-green-400 block";
-                statusMsg.innerText = "✅ DATA QRIS DATABASE VIP BERHASIL DI-UPDATE!";
+                statusMsg.innerText = "✅ DATA QRIS DATABASE VIP BERHASIL DI-UPDATE VIA FREEIMAGE!";
                 fileInput.value = "";
+
             } catch (error) {
+                console.error(error);
                 statusMsg.className = "text-[10px] text-center font-bold tracking-wide mt-2 text-red-500 block";
-                statusMsg.innerText = "❌ OVERWRITE DATA GAGAL!";
+                statusMsg.innerText = "❌ OVERWRITE DATA GAGAL! PERIKSA UKURAN GAMBAR ATAU KONEKSI.";
             } finally {
                 btn.disabled = false;
                 btn.innerText = "UPDATE QRIS IMAGE";
@@ -246,9 +251,9 @@
             let html = "";
             users.forEach(user => {
                 let badgeColor = "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30";
-                if(user.status === "approved") badgeColor = "bg-green-500/20 text-green-400 border border-green-500/30";
-                if(user.status === "banned") badgeColor = "bg-red-500/20 text-red-400 border border-red-500/30";
-                if(user.prank === true) badgeColor = "bg-purple-500/20 text-purple-400 border border-purple-500/30 animate-bounce";
+                if(user.status === "sukses" || user.status === "approved") badgeColor = "bg-green-500/20 text-green-400 border border-green-500/30";
+                if(user.status === "banned" || user.status === "tolak") badgeColor = "bg-red-500/20 text-red-400 border border-red-500/30";
+                if(user.prank === true || user.prank === "true") badgeColor = "bg-purple-500/20 text-purple-400 border border-purple-500/30 animate-bounce";
 
                 const isSosmed = user.alamat.startsWith("[");
                 const textAlamat = isSosmed 
@@ -264,10 +269,10 @@
                         <td class="py-3 px-2 max-w-xs break-words">${textAlamat}</td>
                         <td class="py-3 px-2 text-center space-y-1.5">
                             <div class="inline-block text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${badgeColor}">
-                                ${user.prank ? 'PRANK ACTIVE' : user.status}
+                                ${user.prank === true || user.prank === "true" ? 'PRANK ACTIVE' : user.status}
                             </div>
                             <div class="flex items-center justify-center gap-1.5">
-                                <button onclick="updateStatus('${user.id}', 'approved')" class="px-1.5 py-0.5 bg-green-600 hover:bg-green-500 text-black font-bold text-[9px] rounded shadow">ACC</button>
+                                <button onclick="updateStatus('${user.id}', 'sukses')" class="px-1.5 py-0.5 bg-green-600 hover:bg-green-500 text-black font-bold text-[9px] rounded shadow">ACC</button>
                                 <button onclick="updateStatus('${user.id}', 'banned')" class="px-1.5 py-0.5 bg-red-600 hover:bg-red-500 text-white font-bold text-[9px] rounded shadow">BAN</button>
                                 <button onclick="togglePrank('${user.id}', ${user.prank})" class="px-1.5 py-0.5 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-[9px] rounded shadow">PRANK</button>
                             </div>
@@ -295,11 +300,12 @@
         }
 
         async function togglePrank(id, currentPrankStatus) {
+            const targetStatus = !(currentPrankStatus === true || currentPrankStatus === "true");
             try {
                 await fetch(`${USERS_URL}/${id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prank: !currentPrankStatus })
+                    body: JSON.stringify({ prank: targetStatus })
                 });
                 fetchLiveUsers();
             } catch(e) { alert("Gagal mengirim perintah prank."); }
